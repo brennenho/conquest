@@ -1,0 +1,36 @@
+{
+  "name": "conquest",
+  "displayName": "Conquest",
+  "version": "0.0.1",
+  "description": "Conquer the hassle of registering for USC classes.",
+  "author": "Brennen Ho",
+  "scripts": {
+    "dev": "plasmo dev",
+    "build": "plasmo build",
+    "package": "plasmo package"
+  },
+  "dependencies": {
+    "boxicons": "^2.1.4",
+    "jquery": "^3.7.1",
+    "plasmo": "0.87.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "4.1.1",
+    "@types/chrome": "0.0.258",
+    "@types/node": "20.11.5",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
+    "prettier": "3.2.4",
+    "typescript": "5.3.3"
+  },
+  "manifest": {
+    "host_permissions": [
+      "https://*/*"
+    ],
+    "permissions": [
+      "tabs"
+    ]
+  }
+}
