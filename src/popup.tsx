@@ -6,6 +6,9 @@ import "@fontsource/open-sans/700.css"
 import "@fontsource/inter/600.css"
 import "@fontsource/inter/400.css"
 
+import { generateToken } from "./api/http/auth"
+import { HTTPClient } from "./api/http/client"
+
 function IndexPopup() {
   return (
     <div className="popup">
@@ -13,6 +16,14 @@ function IndexPopup() {
         <h1>COURSES</h1>
       </div>
       <div className="header-bar"></div>
+      <button
+        onClick={async () => {
+          //   const token = generateToken("JH7Q2-KLP8A-9X4VZ-WS2T3-MN6YD")
+          //   HTTPClient.getInstance().setToken(await token)
+          //   console.log(token)
+        }}>
+        Generate Token
+      </button>
       <div className="courses">
         <CourseBox
           courseTag="CSCI"

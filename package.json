@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource/inter": "^5.0.18",
     "@fontsource/open-sans": "^5.0.28",
+    "axios": "^1.7.2",
     "boxicons": "^2.1.4",
     "jquery": "^3.7.1",
     "plasmo": "0.87.1",

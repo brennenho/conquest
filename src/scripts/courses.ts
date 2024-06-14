@@ -1,5 +1,6 @@
 import $ from "jquery"
 
+import appendWatchlistButton from "../components/button"
 import * as Constants from "../constants"
 
 /**
@@ -21,7 +22,7 @@ import * as Constants from "../constants"
  * and uses constants for color and background color values.
  */
 
-export function courseInfo() {
+export function parse() {
   $("div.course-header").each(function () {
     var numRegistered: number = 0
     var numTotal: number = 0
@@ -40,10 +41,11 @@ export function courseInfo() {
           const text = $(this)
             .text()
             .match(/(\d+) of (\d+)/)
+          const parent = $(this).parents("div.section_crsbin")
           if (text) {
             const registered: number = parseInt(text[1], 10)
             const total: number = parseInt(text[2], 10)
-            const parent = $(this).parents("div.section_crsbin")
+
             if (
               parent.find("span." + Constants.CLASS_LECTURE).length > 0 ||
               parent.find("span." + Constants.CLASS_MIXED).length > 0
@@ -58,6 +60,12 @@ export function courseInfo() {
             } else {
               $(this).css("color", Constants.GREEN)
             }
+          } else {
+            appendWatchlistButton(
+              $(parent).find("div.btnAddToMyCourseBin")[0],
+              "54321",
+              "test"
+            )
           }
         })
     })
