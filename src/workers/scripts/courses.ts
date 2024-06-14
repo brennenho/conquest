@@ -1,7 +1,7 @@
 import $ from "jquery"
 
-import appendWatchlistButton from "../components/button"
-import * as Constants from "../constants"
+import * as Constants from "../../constants"
+import appendWatchlistButton from "../../ui/components/button"
 
 /**
  * Updates the display of course info.

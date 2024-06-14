@@ -12,8 +12,10 @@
   "dependencies": {
     "@fontsource/inter": "^5.0.18",
     "@fontsource/open-sans": "^5.0.28",
+    "@plasmohq/storage": "^1.10.0",
     "axios": "^1.7.2",
     "boxicons": "^2.1.4",
+    "classnames": "^2.5.1",
     "jquery": "^3.7.1",
     "plasmo": "0.87.1",
     "react": "18.2.0",

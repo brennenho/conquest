@@ -3,7 +3,7 @@ import axios from "axios"
 import React from "react"
 import ReactDOM from "react-dom"
 
-import { HTTPClient } from "../api/http/client"
+import { HTTPClient } from "../../workers/http/client"
 
 type ButtonProps = {
   label: string
