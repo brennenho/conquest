@@ -3,6 +3,8 @@ import axios from "axios"
 import React from "react"
 import ReactDOM from "react-dom"
 
+import { Storage } from "@plasmohq/storage"
+
 import { HTTPClient } from "../../workers/http/client"
 
 type ButtonProps = {
@@ -25,17 +27,17 @@ const Button: React.FC<ButtonProps> = ({
   )
 }
 
-async function addToWatchlist(
-  section_id: string,
-  department: string,
-  email: string
-) {
+async function addToWatchlist(section_id: string, department: string) {
+  const email = await new Storage().get("userEmail")
+  if (!email) {
+    console.log("Error: user not logged in.")
+    return
+  }
   const request = {
     section_id: section_id,
     department: department,
     email: email
   }
-  console.log("TEST")
   const response = await HTTPClient.inst().post("/watchlist/add", request)
   console.log(response)
 }
@@ -58,7 +60,7 @@ const appendWatchlistButton = (
       className={className}
       style={style}
       onClick={async () => {
-        await addToWatchlist(section_id, department, "test@usc.edu")
+        await addToWatchlist(section_id, department)
       }}
     />,
     container

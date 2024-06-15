@@ -7,5 +7,5 @@ export function Subtitle({
   text: string
   className?: string
 }) {
-  return <h2 className={cn("noMargin", className)}>{text}</h2>
+  return <h2 className={cn(className)}>{text}</h2>
 }

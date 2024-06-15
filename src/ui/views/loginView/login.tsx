@@ -1,24 +1,66 @@
-import cn from "classnames"
-import React from "react"
+import { Box, Button, Container, TextField, Typography } from "@mui/material"
+import React, { useState } from "react"
 
-import { Subtitle } from "../../components/subtitle"
-import sharedStyles from "../../sharedStyles.module.scss"
-import styles from "./login.module.scss"
+import { Storage } from "@plasmohq/storage"
 
-export const LoginView: React.FC<{ switchView: (view: string) => void }> = ({
-  switchView
-}) => {
+import { Subtitle } from "../../components"
+
+interface LoginViewProps {
+  switchView: (view: string) => void
+  handleLogin: (email: string) => void
+}
+
+const LoginView: React.FC<LoginViewProps> = ({ switchView, handleLogin }) => {
+  const [email, setEmail] = useState<string>("")
+  const [error, setError] = useState<string>("")
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value)
+  }
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+
+  const handleSubmit = () => {
+    if (!email) {
+      setError("Email is required.")
+      return
+    }
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email.")
+      return
+    }
+
+    handleLogin(email)
+  }
+
   return (
-    <div
-      className={cn(
-        sharedStyles.fullWidth,
-        sharedStyles.fullHeight,
-        sharedStyles.flexCentered,
-        sharedStyles.flexColumn
-      )}>
-      <Subtitle text="Conquest" />
-      <p>Please enter your USC email.</p>
-      <input type="text" placeholder="USC email" className={styles.input} />
-    </div>
+    <Container maxWidth="sm">
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh">
+        <Subtitle text="Conquest" />
+        <TextField
+          label="Email"
+          type="email"
+          value={email}
+          onChange={handleEmailChange}
+          fullWidth
+          margin="normal"
+          error={!!error}
+          helperText={error}
+        />
+        <Button variant="contained" color="primary" onClick={handleSubmit}>
+          Submit
+        </Button>
+      </Box>
+    </Container>
   )
 }
+
+export default LoginView

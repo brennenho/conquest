@@ -22,7 +22,7 @@ import appendWatchlistButton from "../../ui/components/button"
  * and uses constants for color and background color values.
  */
 
-export function parse() {
+export async function parse() {
   $("div.course-header").each(function () {
     var numRegistered: number = 0
     var numTotal: number = 0
@@ -61,10 +61,15 @@ export function parse() {
               $(this).css("color", Constants.GREEN)
             }
           } else {
+            const sectionId = parent
+              .find("span:has(> span:contains('Section:'))")
+              .find("b")
+              .text()
+              .replace(/\s/g, "")
             appendWatchlistButton(
               $(parent).find("div.btnAddToMyCourseBin")[0],
-              "54321",
-              "test"
+              sectionId,
+              id.substring(id.indexOf("_") + 1, id.indexOf("-"))
             )
           }
         })

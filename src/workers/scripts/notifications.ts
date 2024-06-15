@@ -1,7 +1,4 @@
-console.log("Background script initalized")
-
 export function notify(title: string, message: string) {
-  console.log("Notification triggered")
   chrome.notifications.create(
     "",
     {
