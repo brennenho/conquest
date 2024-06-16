@@ -1,26 +1,7 @@
 import $ from "jquery"
 
 import * as Constants from "../../constants"
-import appendWatchlistButton from "../../ui/components/button"
-
-/**
- * Updates the display of course info.
- *
- * This function iterates over each course header and performs the following actions:
- * - Extracts the number of registered students and total capacity for each course section.
- * - Updates the color of the registration numbers based on the percentage of capacity filled:
- *   - Red if more than 90% filled.
- *   - Orange if more than 75% filled.
- *   - Green otherwise.
- * - Extracts the number of units for the course.
- * - Updates the course header to include the number of units and, if the course is full, marks it as "FULL".
- *   Otherwise, it displays the number of registered students out of the total capacity.
- * - Changes the background color of the course header based on the percentage of capacity filled:
- *   - Red background if the course is full.
- *
- * It relies on specific HTML structure and CSS classes to identify and update the elements,
- * and uses constants for color and background color values.
- */
+import appendWatchlistButton from "../../ui/components/watchlistButton"
 
 export async function parse() {
   $("div.course-header").each(function () {

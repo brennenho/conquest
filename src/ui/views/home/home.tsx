@@ -1,12 +1,14 @@
 import { Box, Button, Container, Typography } from "@mui/material"
 import React from "react"
 
-interface CoursesViewProps {
-  email: string | null
+import { Subtitle } from "../../components"
+
+interface HomeViewProps {
+  email: string
   handleLogout: () => void
 }
 
-const CoursesView: React.FC<CoursesViewProps> = ({ email, handleLogout }) => {
+export const HomeView: React.FC<HomeViewProps> = ({ email, handleLogout }) => {
   return (
     <Container maxWidth="sm">
       <Box
@@ -15,9 +17,7 @@ const CoursesView: React.FC<CoursesViewProps> = ({ email, handleLogout }) => {
         justifyContent="center"
         alignItems="center"
         minHeight="100vh">
-        <Typography variant="h5" gutterBottom>
-          Logged in as: {email}
-        </Typography>
+        <Subtitle text={`Welcome ${email}`} />
         <Button variant="contained" color="primary" onClick={handleLogout}>
           Logout
         </Button>
@@ -25,5 +25,3 @@ const CoursesView: React.FC<CoursesViewProps> = ({ email, handleLogout }) => {
     </Container>
   )
 }
-
-export default CoursesView

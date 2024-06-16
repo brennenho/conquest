@@ -1,16 +1,13 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material"
 import React, { useState } from "react"
 
-import { Storage } from "@plasmohq/storage"
-
 import { Subtitle } from "../../components"
 
 interface LoginViewProps {
-  switchView: (view: string) => void
   handleLogin: (email: string) => void
 }
 
-const LoginView: React.FC<LoginViewProps> = ({ switchView, handleLogin }) => {
+export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
   const [email, setEmail] = useState<string>("")
   const [error, setError] = useState<string>("")
 
@@ -62,5 +59,3 @@ const LoginView: React.FC<LoginViewProps> = ({ switchView, handleLogin }) => {
     </Container>
   )
 }
-
-export default LoginView

@@ -1,3 +1,2 @@
-export * from "./button"
-export * from "./courseBox/courseBox"
+export * from "./watchlistButton"
 export * from "./subtitle"

@@ -1,7 +1,7 @@
 import $ from "jquery"
 import type { PlasmoCSConfig } from "plasmo"
 
-import * as Courses from "../workers/scripts/courses"
+import * as Courses from "../backend/scripts/courses"
 
 // import * as Parse from "../scripts/parse"
 

@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react"
 
-import { Storage } from "@plasmohq/storage"
+import { StorageManager } from "../backend/managers"
+import { HomeView, LoginView } from "./views"
 
-import CoursesView from "./views/coursesView/courses"
-import LoginView from "./views/loginView/login"
-
-const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<string>("loginView")
+function App() {
+  const [currentView, setCurrentView] = useState<string>("login")
   const [email, setEmail] = useState<string | null>(null)
+  const storageManager = new StorageManager()
 
   useEffect(() => {
     const checkStoredEmail = async () => {
-      const storage = new Storage()
-      const storedEmail = await storage.get("userEmail")
+      const storedEmail = await storageManager.getEmail()
       if (storedEmail) {
         setEmail(storedEmail)
-        setCurrentView("coursesView")
+        setCurrentView("home")
       }
     }
 
@@ -27,26 +25,22 @@ const App: React.FC = () => {
   }
 
   const handleLogout = async () => {
-    const storage = new Storage()
-    await storage.remove("userEmail")
+    await storageManager.logout()
     setEmail(null)
-    setCurrentView("loginView")
+    setCurrentView("login")
   }
 
   const handleLogin = async (email: string) => {
-    const storage = new Storage()
-    await storage.set("userEmail", email)
+    await storageManager.login(email)
     setEmail(email)
-    setCurrentView("coursesView")
+    setCurrentView("home")
   }
 
   return (
     <div>
-      {currentView === "loginView" && (
-        <LoginView switchView={switchView} handleLogin={handleLogin} />
-      )}
-      {currentView === "coursesView" && (
-        <CoursesView email={email} handleLogout={handleLogout} />
+      {currentView === "login" && <LoginView handleLogin={handleLogin} />}
+      {currentView === "home" && (
+        <HomeView email={email} handleLogout={handleLogout} />
       )}
     </div>
   )
