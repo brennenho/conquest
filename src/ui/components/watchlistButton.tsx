@@ -30,8 +30,9 @@ const WatchlistButton: React.FC<WatchlistButtonProps> = ({
   React.useEffect(() => {
     const checkWatchlist = async () => {
       const status = await watchlistManager.getWatchlistStatus(sectionId)
-      if (status && status === "watching") {
+      if (status) {
         setLabel("Remove from watchlist")
+        setStyle(styleWatching)
       }
     }
 

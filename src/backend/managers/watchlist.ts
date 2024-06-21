@@ -55,14 +55,32 @@ export class WatchlistManager {
     }
   }
 
-  public async getWatchlistStatus(sectionId: string) {
-    const status = await this._storageManager.get(sectionId)
+  public async getWatchlistStatus(sectionId: string): Promise<boolean> {
     const email = await this._storageManager.getEmail()
-    if (status === email) {
-      return "watching"
-    } else {
-      await this._storageManager.remove(sectionId)
-      return null
+    if (!email) {
+      return false
     }
+    const status = await this._storageManager.get(sectionId)
+    console.log(status)
+    if (status === email) {
+      // currently logged in user is watching
+      return true
+    }
+    // current user has no status stored, request server
+    // TODO: make this one request for the entire page, rather than a request for each button
+    const request = {
+      section_id: sectionId,
+      email: email
+    }
+    const response = await this._httpClient.post("/watchlist/search", request)
+    if (response.status === 200 && response.data) {
+      // stored status differs from server status
+      await this._storageManager.set(sectionId, email)
+      return true
+    }
+
+    // user is not watching
+    await this._storageManager.remove(sectionId)
+    return false
   }
 }
