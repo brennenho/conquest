@@ -6,3 +6,5 @@ export const BACKGROUND_ORANGE = "#ffcc99"
 
 export const CLASS_LECTURE = "course-section-lecture"
 export const CLASS_MIXED = "course-section-mixed"
+
+export const COURSE_BIN_URL = "https://webreg.usc.edu/CourseBin"

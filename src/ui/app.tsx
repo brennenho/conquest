@@ -4,46 +4,46 @@ import { StorageManager } from "../backend/managers"
 import { HomeView, LoginView } from "./views"
 
 function App() {
-  const [currentView, setCurrentView] = useState<string>("login")
-  const [email, setEmail] = useState<string | null>(null)
-  const storageManager = new StorageManager()
+    const [currentView, setCurrentView] = useState<string>("login")
+    const [email, setEmail] = useState<string | null>(null)
+    const storageManager = new StorageManager()
 
-  useEffect(() => {
-    const checkStoredEmail = async () => {
-      const storedEmail = await storageManager.getEmail()
-      if (storedEmail) {
-        setEmail(storedEmail)
-        setCurrentView("home")
-      }
+    useEffect(() => {
+        const checkStoredEmail = async () => {
+            const storedEmail = await storageManager.get("userEmail")
+            if (storedEmail) {
+                setEmail(storedEmail)
+                setCurrentView("home")
+            }
+        }
+
+        checkStoredEmail()
+    }, [])
+
+    const switchView = (view: string) => {
+        setCurrentView(view)
     }
 
-    checkStoredEmail()
-  }, [])
+    const handleLogout = async () => {
+        await storageManager.remove("userEmail")
+        setEmail(null)
+        setCurrentView("login")
+    }
 
-  const switchView = (view: string) => {
-    setCurrentView(view)
-  }
+    const handleLogin = async (email: string) => {
+        await storageManager.set("userEmail", email)
+        setEmail(email)
+        setCurrentView("home")
+    }
 
-  const handleLogout = async () => {
-    await storageManager.logout()
-    setEmail(null)
-    setCurrentView("login")
-  }
-
-  const handleLogin = async (email: string) => {
-    await storageManager.login(email)
-    setEmail(email)
-    setCurrentView("home")
-  }
-
-  return (
-    <div>
-      {currentView === "login" && <LoginView handleLogin={handleLogin} />}
-      {currentView === "home" && (
-        <HomeView email={email} handleLogout={handleLogout} />
-      )}
-    </div>
-  )
+    return (
+        <div>
+            {currentView === "login" && <LoginView handleLogin={handleLogin} />}
+            {currentView === "home" && (
+                <HomeView email={email} handleLogout={handleLogout} />
+            )}
+        </div>
+    )
 }
 
 export default App
