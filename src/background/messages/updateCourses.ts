@@ -13,6 +13,17 @@ import { COURSE_BIN_URL } from "~constants"
  * @param res
  */
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
+    if (req.body.useCache) {
+        const updated = await new StorageManager().get(
+            "registeredCoursesCached"
+        )
+        if (updated) {
+            // Get cached courses
+            const courses = await new StorageManager().get("registeredCourses")
+            res.send({ success: true, courses: courses })
+            return
+        }
+    }
     try {
         // Get HTML of the CourseBin page
         const response = await fetch(COURSE_BIN_URL)
@@ -51,13 +62,14 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
                     })
             })
 
-        // Store the extracted data
+        // Cache registered couurses
         const storageManager = new StorageManager()
         storageManager.set("registeredCourses", courses)
+        storageManager.set("registeredCoursesCached", true)
 
-        res.send({ success: true })
+        res.send({ success: true, courses: courses })
     } catch (error) {
-        res.send({ error: error.toString() })
+        res.send({ success: false, error: error.toString() })
     }
 }
 

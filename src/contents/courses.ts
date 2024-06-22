@@ -12,8 +12,9 @@ export const config: PlasmoCSConfig = {
 
 $(document).ready(async function () {
     // Send a message to the background script to update the courses
-    await sendToBackground({
+    const registeredCourses = await sendToBackground({
         name: "updateCourses",
+        body: { useCache: true },
         extensionId: process.env.PLASMO_PUBLIC_EXTENSION_ID
     })
 
