@@ -4,18 +4,35 @@ export class StorageManager {
     private _storage = new Storage()
 
     public async set(key: string, value: any) {
-        await this._storage.set(key, value)
+        try {
+            await this._storage.set(key, value)
+        } catch (error) {
+            console.error("Error setting value in storage:", error)
+        }
     }
 
     public async get(key: string): Promise<any> {
-        return await this._storage.get(key)
+        try {
+            return await this._storage.get(key)
+        } catch (error) {
+            console.error("Error getting value from storage:", error)
+            return null
+        }
     }
 
     public async remove(key: string) {
-        await this._storage.remove(key)
+        try {
+            await this._storage.remove(key)
+        } catch (error) {
+            console.error("Error removing value from storage:", error)
+        }
     }
 
     public async clear() {
-        await this._storage.clear()
+        try {
+            await this._storage.clear()
+        } catch (error) {
+            console.error("Error clearing storage:", error)
+        }
     }
 }

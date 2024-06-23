@@ -1,38 +1,63 @@
 import $ from "jquery"
 
 import { StorageManager } from "../managers"
-import { timeToMins } from "../utils"
+import { daysToBitmask, timeToMins } from "../utils"
 
 export async function parseCourseBin(html: string) {
     try {
         let courses = {}
-        console.log("PARSING COURSE BIN")
         $(html)
-            .find("div.section-table")
+            .find("div.accordion-content-area")
             .each(function () {
+                const course: string = $(this).attr("id").split("_")[1]
                 $(this)
-                    .find("div.section")
+                    .find("div.section-table")
                     .each(function () {
                         $(this)
-                            .find("div.dvSRtxt[style*='display: block']")
+                            .find("div.section")
                             .each(function () {
-                                var id = $(this).attr("id")
-                                var parts = id.split("_")
-                                if (parts[1] === "regY") {
-                                    const time = $(this)
-                                        .parents("div.section_crsbin")
-                                        .find(
-                                            "span:has(> span:contains('Time:'))"
-                                        )
-                                        .find("span:not(:contains('Time:'))")
-                                        .text()
-                                        .trim()
-                                        .split("-")
-                                    courses[parts[3]] = [
-                                        timeToMins(time[0]),
-                                        timeToMins(time[1])
-                                    ]
-                                }
+                                $(this)
+                                    .find(
+                                        "div.dvSRtxt[style*='display: block']"
+                                    )
+                                    .each(function () {
+                                        var id = $(this).attr("id")
+                                        var parts = id.split("_")
+                                        if (parts[1] === "regY") {
+                                            const parent =
+                                                $(this).parents(
+                                                    "div.section_crsbin"
+                                                )
+                                            const time = parent
+                                                .find(
+                                                    "span:has(> span:contains('Time:'))"
+                                                )
+                                                .find(
+                                                    "span:not(:contains('Time:'))"
+                                                )
+                                                .text()
+                                                .trim()
+                                                .split("-")
+
+                                            const days = parent
+                                                .find(
+                                                    "span:has(> span:contains('Days:'))"
+                                                )
+                                                .find(
+                                                    "span:not(:contains('Days:'))"
+                                                )
+                                                .text()
+                                                .trim()
+
+                                            // stored as [course, days, start, end]
+                                            courses[parts[3]] = [
+                                                course,
+                                                daysToBitmask(days),
+                                                timeToMins(time[0]),
+                                                timeToMins(time[1])
+                                            ]
+                                        }
+                                    })
                             })
                     })
             })

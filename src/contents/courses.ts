@@ -3,8 +3,10 @@ import type { PlasmoCSConfig } from "plasmo"
 
 import { StorageManager } from "~/backend/managers"
 import * as Constants from "~/constants"
+import { COURSE_BIN_URL } from "~/constants"
 import appendWatchlistButton from "~/ui/components/watchlistButton"
 import { parseCourseBin } from "~backend/parsers/courseBin"
+import { overlaps } from "~backend/utils"
 
 export const config: PlasmoCSConfig = {
     matches: ["https://webreg.usc.edu/Courses*"]
@@ -18,7 +20,7 @@ $(document).ready(async function () {
         // Get cached courses
         courses = await storageManager.get("registeredCourses")
     } else {
-        const html = await fetch("https://webreg.usc.edu/CourseBin")
+        const html = await fetch(COURSE_BIN_URL)
         courses = await parseCourseBin(await html.text())
     }
 
@@ -30,6 +32,7 @@ $(document).ready(async function () {
         var numRegistered: number = 0
         var numTotal: number = 0
         var units: number = 0
+        var noOverlap: boolean = false
 
         const id: string = $(this).attr("href")
         const row = $(id)
@@ -45,6 +48,58 @@ $(document).ready(async function () {
                         .text()
                         .match(/(\d+) of (\d+)/)
                     const parent = $(this).parents("div.section_crsbin")
+                    const sectionId = parent
+                        .find("span:has(> span:contains('Section:'))")
+                        .find("b")
+                        .text()
+                        .replace(/\s/g, "")
+                        .substring(0, 5)
+                    const time = parent
+                        .find("span:has(> span:contains('Time:'))")
+                        .find("span:not(:contains('Time:'))")
+                        .text()
+                        .trim()
+                        .split("-")
+                    const days = parent
+                        .find("span:has(> span:contains('Days:'))")
+                        .find("span:not(:contains('Days:'))")
+                        .text()
+                        .trim()
+
+                    if (sectionId in courses) {
+                        parent
+                            .parent()
+                            .css("background-color", Constants.BACKGROUND_GREEN)
+                    } else {
+                        const overlap = overlaps(
+                            days,
+                            time[0],
+                            time[1],
+                            courses
+                        )
+                        if (overlap) {
+                            parent
+                                .parent()
+                                .css(
+                                    "background-color",
+                                    Constants.BACKGROUND_ORANGE
+                                )
+                            const button = parent
+                                .find("div.btnAddToMyCourseBin")
+                                .find("button")
+                            button.text(`Overlaps ${overlap}`)
+                            button.hover(
+                                function () {
+                                    $(this).text("Add anyway")
+                                },
+                                function () {
+                                    $(this).text(`Overlaps ${overlap}`)
+                                }
+                            )
+                        } else {
+                            noOverlap = true
+                        }
+                    }
                     if (text) {
                         const registered: number = parseInt(text[1], 10)
                         const total: number = parseInt(text[2], 10)
@@ -66,11 +121,6 @@ $(document).ready(async function () {
                             $(this).css("color", Constants.GREEN)
                         }
                     } else {
-                        const sectionId = parent
-                            .find("span:has(> span:contains('Section:'))")
-                            .find("b")
-                            .text()
-                            .replace(/\s/g, "")
                         appendWatchlistButton(
                             $(parent).find("div.btnAddToMyCourseBin")[0],
                             sectionId,
@@ -84,7 +134,8 @@ $(document).ready(async function () {
             .each(function () {
                 const text = $(this)
                     .text()
-                    .match(/Units:\s*(\d+\.\d+)/)
+                    .match(/Units:\s*(\d+\.\d+(-\d+\.\d+)?)/)
+
                 const parent = $(this).parents("div.section_crsbin")
                 if (
                     parent.find("span." + Constants.CLASS_LECTURE).length > 0 ||
@@ -100,6 +151,10 @@ $(document).ready(async function () {
             })
             $(this).css("background-color", Constants.BACKGROUND_RED)
         } else {
+            if (!noOverlap) {
+                $(this).css("background-color", Constants.BACKGROUND_ORANGE)
+            }
+
             $(this)
                 .find("span.crsTitl")
                 .text(function (index, current) {
