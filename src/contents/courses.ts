@@ -1,22 +1,26 @@
 import $ from "jquery"
 import type { PlasmoCSConfig } from "plasmo"
 
-import { sendToBackground } from "@plasmohq/messaging"
-
-import * as Constants from "../constants"
-import appendWatchlistButton from "../ui/components/watchlistButton"
+import { StorageManager } from "~/backend/managers"
+import * as Constants from "~/constants"
+import appendWatchlistButton from "~/ui/components/watchlistButton"
+import { parseCourseBin } from "~backend/parsers/courseBin"
 
 export const config: PlasmoCSConfig = {
     matches: ["https://webreg.usc.edu/Courses*"]
 }
 
 $(document).ready(async function () {
-    // Send a message to the background script to update the courses
-    const registeredCourses = await sendToBackground({
-        name: "updateCourses",
-        body: { useCache: true },
-        extensionId: process.env.PLASMO_PUBLIC_EXTENSION_ID
-    })
+    let courses = {}
+    const storageManager = new StorageManager()
+    const updated = await storageManager.get("registeredCoursesCached")
+    if (updated) {
+        // Get cached courses
+        courses = await storageManager.get("registeredCourses")
+    } else {
+        const html = await fetch("https://webreg.usc.edu/CourseBin")
+        courses = await parseCourseBin(await html.text())
+    }
 
     /**
      * Parse course page and extract course capacity information.

@@ -1,37 +1,12 @@
-import { load } from "cheerio"
+import $ from "jquery"
 
-import type { PlasmoMessaging } from "@plasmohq/messaging"
+import { StorageManager } from "../managers"
+import { timeToMins } from "../utils"
 
-import { StorageManager } from "~backend/managers"
-import { timeToMins } from "~backend/utils"
-import { COURSE_BIN_URL } from "~constants"
-
-/**
- * Scrapes the CourseBin page.
- * Extracts the start and end times of each registered section.
- * @param req
- * @param res
- */
-const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
-    if (req.body.useCache) {
-        const updated = await new StorageManager().get(
-            "registeredCoursesCached"
-        )
-        if (updated) {
-            // Get cached courses
-            const courses = await new StorageManager().get("registeredCourses")
-            res.send({ success: true, courses: courses })
-            return
-        }
-    }
+export async function parseCourseBin(html: string) {
     try {
-        // Get HTML of the CourseBin page
-        const response = await fetch(COURSE_BIN_URL)
-        const html = await response.text()
-        const $ = load(html)
         let courses = {}
-
-        // Parse HTML with Cheerio
+        console.log("PARSING COURSE BIN")
         $(html)
             .find("div.section-table")
             .each(function () {
@@ -61,16 +36,12 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
                             })
                     })
             })
-
-        // Cache registered couurses
         const storageManager = new StorageManager()
-        storageManager.set("registeredCourses", courses)
-        storageManager.set("registeredCoursesCached", true)
+        await storageManager.set("registeredCourses", courses)
+        await storageManager.set("registeredCoursesCached", true)
 
-        res.send({ success: true, courses: courses })
+        return courses
     } catch (error) {
-        res.send({ success: false, error: error.toString() })
+        return { error: error.toString() }
     }
 }
-
-export default handler

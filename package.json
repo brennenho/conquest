@@ -40,7 +40,7 @@
     },
     "manifest": {
         "host_permissions": [
-            "https://*/*"
+            "https://webreg.usc.edu/*"
         ],
         "permissions": [
             "tabs",
