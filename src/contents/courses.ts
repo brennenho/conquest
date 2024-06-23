@@ -1,16 +1,26 @@
 import $ from "jquery"
 import type { PlasmoCSConfig } from "plasmo"
 
+import { Storage } from "@plasmohq/storage"
+
 import { StorageManager } from "~/backend/managers"
 import * as Constants from "~/constants"
 import { COURSE_BIN_URL } from "~/constants"
 import appendWatchlistButton from "~/ui/components/watchlistButton"
+import { WatchlistManager } from "~backend/managers"
 import { parseCourseBin } from "~backend/parsers/courseBin"
 import { overlaps } from "~backend/utils"
 
 export const config: PlasmoCSConfig = {
     matches: ["https://webreg.usc.edu/Courses*"]
 }
+
+const storage = new Storage()
+storage.watch({
+    watchlistCached: (c) => {
+        window.location.reload()
+    }
+})
 
 $(document).ready(async function () {
     let courses = {}
@@ -22,6 +32,9 @@ $(document).ready(async function () {
     } else {
         const html = await fetch(COURSE_BIN_URL)
         courses = await parseCourseBin(await html.text())
+    }
+    if (!(await storageManager.get("watchlistCached"))) {
+        await new WatchlistManager().getWatchlist()
     }
 
     /**

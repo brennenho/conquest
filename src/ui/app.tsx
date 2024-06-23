@@ -32,6 +32,7 @@ function App() {
 
     const handleLogin = async (email: string) => {
         await storageManager.set("userEmail", email)
+        await storageManager.set("watchlistCached", false)
         setEmail(email)
         setCurrentView("home")
     }
