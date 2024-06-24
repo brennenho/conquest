@@ -7,6 +7,7 @@ import { StorageManager } from "~/backend/managers"
 import * as Constants from "~/constants"
 import { COURSE_BIN_URL } from "~/constants"
 import appendWatchlistButton from "~/ui/components/watchlistButton"
+import appendStarRating from "~ui/components/starRating"
 import { WatchlistManager } from "~backend/managers"
 import { parseCourseBin } from "~backend/parsers/courseBin"
 import { overlaps } from "~backend/utils"
@@ -140,6 +141,7 @@ $(document).ready(async function () {
                             id.substring(id.indexOf("_") + 1, id.indexOf("-"))
                         )
                     }
+                    appendStarRating($(parent).find("div.btnAddToMyCourseBin")[0],"3.0")
                 })
         })
         $(row)
