@@ -18,7 +18,6 @@
         "@mantine/core": "^7.10.2",
         "@mantine/hooks": "^7.10.2",
         "@mui/icons-material": "^5.15.20",
-        "@mui/material": "^5.15.20",
         "@mui/styles": "^5.15.20",
         "@plasmohq/messaging": "^0.6.2",
         "@plasmohq/storage": "^1.10.0",

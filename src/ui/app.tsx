@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react"
 
+import { UserManager } from "~backend/managers"
+
 import { StorageManager } from "../backend/managers"
 import { HomeView, LoginView } from "./views"
 
@@ -29,9 +31,10 @@ function App() {
     }
 
     const handleLogout = async () => {
-        await storageManager.remove("userEmail")
+        await new UserManager().setValidationWindow(false)
         setEmail(null)
         setCurrentView("login")
+        await storageManager.remove("userEmail")
     }
 
     const handleLogin = async (email: string) => {

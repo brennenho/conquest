@@ -10,9 +10,9 @@ import {
 import { useDisclosure } from "@mantine/hooks"
 import { IconAt } from "@tabler/icons-react"
 import cn from "classnames"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
-import { getPassword, validatePassword } from "~backend/managers"
+import { UserManager } from "~backend/managers"
 
 import sharedStyles from "../../sharedStyles.module.scss"
 import style from "./login.module.scss"
@@ -27,9 +27,16 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
     const [pinError, setPinError] = useState<boolean>(false)
     const [opened, { open, close }] = useDisclosure(false)
 
-    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(event.target.value)
-    }
+    const userManager = new UserManager()
+
+    useEffect(() => {
+        ;(async () => {
+            if (await userManager.getValidationWindow()) {
+                open()
+            }
+            setEmail(await userManager.getEmail())
+        })()
+    }, [])
 
     const validateEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -46,10 +53,10 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
             return
         }
 
-        getPassword(email)
         open()
-
-        // handleLogin(email)
+        userManager.setEmail(email)
+        userManager.getPassword(email)
+        userManager.setValidationWindow(true)
     }
 
     const icon = <IconAt style={{ width: rem(16), height: rem(16) }} />
@@ -58,7 +65,12 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
         <div className={cn(style.login, sharedStyles.flexColumn)}>
             <Drawer
                 opened={opened}
-                onClose={close}
+                onClose={async () => {
+                    close()
+                    setPinError(false)
+                    setEmail("")
+                    await userManager.setValidationWindow(false)
+                }}
                 overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
                 offset={8}
                 size={384}
@@ -79,21 +91,21 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
                                 placeholder=""
                                 error={pinError}
                                 type="number"
-                                onChange={(event) => {
+                                onChange={async (event) => {
                                     if (event.length < 5) {
                                         setPinError(false)
                                     } else if (event.length === 5) {
-                                        validatePassword(email, event).then(
-                                            (res) => {
-                                                console.log("TEST")
-                                                console.log(res.data)
-                                                if (res.data) {
-                                                    handleLogin(email)
-                                                } else {
-                                                    setPinError(true)
-                                                }
-                                            }
-                                        )
+                                        const pass =
+                                            await userManager.validatePassword(
+                                                email,
+                                                event
+                                            )
+                                        if (pass.data) {
+                                            handleLogin(email)
+                                            setEmail("")
+                                        } else {
+                                            setPinError(true)
+                                        }
                                     }
                                 }}
                             />

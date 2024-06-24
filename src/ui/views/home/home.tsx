@@ -1,27 +1,32 @@
-import { Box, Button, Container, Typography } from "@mui/material"
+import { Button, Text, Title } from "@mantine/core"
 import React from "react"
 
-import { Subtitle } from "../../components"
+import style from "./home.module.scss"
 
 interface HomeViewProps {
-  email: string
-  handleLogout: () => void
+    email: string
+    handleLogout: () => void
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({ email, handleLogout }) => {
-  return (
-    <Container maxWidth="sm">
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh">
-        <Subtitle text={`Welcome ${email}`} />
-        <Button variant="contained" color="primary" onClick={handleLogout}>
-          Logout
-        </Button>
-      </Box>
-    </Container>
-  )
+    return (
+        <div>
+            <div className={style.title}>
+                <Title order={2}>Home</Title>
+            </div>
+            <Text fw={500} ta="center">
+                Welcome {email}
+            </Text>
+            <div className={style.button}>
+                <Button
+                    variant="light"
+                    color="red"
+                    size="sm"
+                    fullWidth
+                    onClick={handleLogout}>
+                    Logout
+                </Button>
+            </div>
+        </div>
+    )
 }
