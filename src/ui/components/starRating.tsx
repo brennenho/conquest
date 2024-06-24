@@ -10,15 +10,15 @@ const StarRating: React.FC<StarRatingProps> = ({
     ratings
 }) => {
     return (<Ratings
-        rating={3.403}
-        widgetDimensions="20px"
-        widgetSpacings="5px"
+        rating={Number(ratings)}
+        widgetDimensions="10px"
+        widgetSpacings="2px"
       >
-        <Ratings.Widget widgetRatedColor="rgb(0,255,255)"/>
-        <Ratings.Widget widgetRatedColor="rgb(0,255,255)"/>
-        <Ratings.Widget widgetRatedColor="rgb(0,255,255)"/>
-        <Ratings.Widget widgetRatedColor="rgb(0,255,255)"/>
-        <Ratings.Widget widgetRatedColor="rgb(0,255,255)"/>
+        <Ratings.Widget widgetRatedColor="rgb(245, 236, 66)"/>
+        <Ratings.Widget widgetRatedColor="rgb(245, 236, 66)"/>
+        <Ratings.Widget widgetRatedColor="rgb(245, 236, 66)"/>
+        <Ratings.Widget widgetRatedColor="rgb(245, 236, 66)"/>
+        <Ratings.Widget widgetRatedColor="rgb(245, 236, 66)"/>
       </Ratings>)
 }
 const appendStarRating = (
@@ -29,6 +29,6 @@ const appendStarRating = (
     target.appendChild(container)
 
     const root = createRoot(container)
-    root.render(<StarRating ratings={"2.0"}/>)
+    root.render(<StarRating ratings={rating}/>)
 }
 export default appendStarRating

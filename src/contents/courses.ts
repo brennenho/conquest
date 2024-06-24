@@ -141,7 +141,14 @@ $(document).ready(async function () {
                             id.substring(id.indexOf("_") + 1, id.indexOf("-"))
                         )
                     }
-                    appendStarRating($(parent).find("div.btnAddToMyCourseBin")[0],"3.0")
+                    const professor = parent.find("span:has(> span:contains('Instructor:'))")
+                    .find("span:not(:contains('Instructor:'))")
+                    .text()
+                    .trim()
+                    if (professor)
+                        {
+                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0],"3.0")
+                        }
                 })
         })
         $(row)
