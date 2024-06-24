@@ -14,7 +14,6 @@ export class UserManager {
             email,
             password
         })
-        console.log("RESULT", result)
         return result
     }
 
