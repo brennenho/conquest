@@ -30,6 +30,8 @@ export class WatchlistManager {
         }
 
         const response = await this._httpClient.post("/watchlist/add", request)
+
+        // Set watchlist button if addition was successful
         if (response.status === 200) {
             setLabel("Remove from watchlist")
             this._storageManager.set(sectionId, email)
@@ -63,6 +65,8 @@ export class WatchlistManager {
             "/watchlist/delete",
             request
         )
+
+        // Reset watchlist button if deletion was successful
         if (response.status === 200) {
             setLabel("Add to watchlist")
             this._storageManager.remove(sectionId)
