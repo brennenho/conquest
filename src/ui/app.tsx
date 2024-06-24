@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react"
 import { StorageManager } from "../backend/managers"
 import { HomeView, LoginView } from "./views"
 
+import "@mantine/core/styles.css"
+
+import { createTheme, MantineProvider } from "@mantine/core"
+
 function App() {
     const [currentView, setCurrentView] = useState<string>("login")
     const [email, setEmail] = useState<string | null>(null)
@@ -37,13 +41,18 @@ function App() {
         setCurrentView("home")
     }
 
+    const theme = createTheme({
+        fontFamily: "Open Sans, sans-serif",
+        defaultRadius: "md"
+    })
+
     return (
-        <div>
+        <MantineProvider theme={theme}>
             {currentView === "login" && <LoginView handleLogin={handleLogin} />}
             {currentView === "home" && (
                 <HomeView email={email} handleLogout={handleLogout} />
             )}
-        </div>
+        </MantineProvider>
     )
 }
 
