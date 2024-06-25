@@ -8,7 +8,7 @@ import * as Constants from "~/constants"
 import { COURSE_BIN_URL } from "~/constants"
 import appendWatchlistButton from "~/ui/components/watchlistButton"
 import appendStarRating from "~ui/components/starRating"
-import { WatchlistManager } from "~backend/managers"
+import { WatchlistManager, RatingManager} from "~backend/managers"
 import { parseCourseBin } from "~backend/parsers/courseBin"
 import { overlaps } from "~backend/utils"
 
@@ -141,13 +141,17 @@ $(document).ready(async function () {
                             id.substring(id.indexOf("_") + 1, id.indexOf("-"))
                         )
                     }
+                    const ratingManager = new RatingManager()
                     const professor = parent.find("span:has(> span:contains('Instructor:'))")
                     .find("span:not(:contains('Instructor:'))")
                     .text()
                     .trim()
                     if (professor)
                         {
-                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0],"3.0")
+                            //const data = ratingManager.getProfessor("Mark", "Redekopp", "Electrical and Computer Engineering")
+                            // console.log(data)
+                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0], "5")
+                            
                         }
                 })
         })
