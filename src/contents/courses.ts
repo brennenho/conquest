@@ -37,10 +37,11 @@ $(document).ready(async function () {
     if (!(await storageManager.get("watchlistCached"))) {
         await new WatchlistManager().getWatchlist()
     }
-
+    const department = $("h3").text().trim()
     /**
      * Parse course page and extract course capacity information.
      * Apply color formatting and insert elements as needed.
+     * Add rate my professor rating in the form of stars
      */
     $("div.course-header").each(function () {
         var numRegistered: number = 0
@@ -141,6 +142,14 @@ $(document).ready(async function () {
                             id.substring(id.indexOf("_") + 1, id.indexOf("-"))
                         )
                     }
+                })
+        })
+        $(row).each(async function (){
+            $(this)
+                .find("span:has(> span:contains('Registered:'))")
+                .find("span:not(:contains('Registered:'))")
+                .each(async function () {
+                    const parent = $(this).parents("div.section_crsbin")
                     const ratingManager = new RatingManager()
                     const professor = parent.find("span:has(> span:contains('Instructor:'))")
                     .find("span:not(:contains('Instructor:'))")
@@ -148,13 +157,13 @@ $(document).ready(async function () {
                     .trim()
                     if (professor)
                         {
-                            //const data = ratingManager.getProfessor("Mark", "Redekopp", "Electrical and Computer Engineering")
-                            // console.log(data)
-                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0], "5")
-                            
+                            const last_name = professor.substring(0, professor.indexOf(','))
+                            const first_name = professor.substring(professor.indexOf(',')+2)
+                            const data = await ratingManager.getProfessor(first_name, last_name, department)
+                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0], data)    
                         }
                 })
-        })
+        })  
         $(row)
             .find("span:has(> span:contains('Units:'))")
             .each(function () {
