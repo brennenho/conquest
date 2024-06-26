@@ -58,7 +58,7 @@ $(document).ready(async function () {
             $(this)
                 .find("span:has(> span:contains('Registered:'))")
                 .find("span:not(:contains('Registered:'))")
-                .each(function () {
+                .each(async function () {
                     const text = $(this)
                         .text()
                         .match(/(\d+) of (\d+)/)
@@ -142,14 +142,6 @@ $(document).ready(async function () {
                             id.substring(id.indexOf("_") + 1, id.indexOf("-"))
                         )
                     }
-                })
-        })
-        $(row).each(async function (){
-            $(this)
-                .find("span:has(> span:contains('Registered:'))")
-                .find("span:not(:contains('Registered:'))")
-                .each(async function () {
-                    const parent = $(this).parents("div.section_crsbin")
                     const ratingManager = new RatingManager()
                     const professor = parent.find("span:has(> span:contains('Instructor:'))")
                     .find("span:not(:contains('Instructor:'))")
@@ -160,10 +152,10 @@ $(document).ready(async function () {
                             const last_name = professor.substring(0, professor.indexOf(','))
                             const first_name = professor.substring(professor.indexOf(',')+2)
                             const data = await ratingManager.getProfessor(first_name, last_name, department)
-                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0], data[4], data[1])    
+                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0], data[4], data[0])    
                         }
                 })
-        })  
+        })
         $(row)
             .find("span:has(> span:contains('Units:'))")
             .each(function () {
