@@ -1,6 +1,7 @@
 import {
     Button,
     Drawer,
+    FocusTrap,
     PinInput,
     rem,
     Text,
@@ -33,8 +34,8 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
         ;(async () => {
             if (await userManager.getValidationWindow()) {
                 open()
+                setEmail(await userManager.getEmail())
             }
-            setEmail(await userManager.getEmail())
         })()
     }, [])
 
@@ -68,7 +69,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
                 onClose={async () => {
                     close()
                     setPinError(false)
-                    setEmail("")
+                    // setEmail("")
                     await userManager.setValidationWindow(false)
                 }}
                 overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
@@ -84,31 +85,33 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
                             code. Your code will expire in 10 minutes.
                         </Text>
                         <div className={style.pin}>
-                            <PinInput
-                                size="sm"
-                                length={5}
-                                oneTimeCode
-                                placeholder=""
-                                error={pinError}
-                                type="number"
-                                onChange={async (event) => {
-                                    if (event.length < 5) {
-                                        setPinError(false)
-                                    } else if (event.length === 5) {
-                                        const pass =
-                                            await userManager.validatePassword(
-                                                email,
-                                                event
-                                            )
-                                        if (pass.data) {
-                                            handleLogin(email)
-                                            setEmail("")
-                                        } else {
-                                            setPinError(true)
+                            <FocusTrap active={true}>
+                                <PinInput
+                                    size="sm"
+                                    length={5}
+                                    oneTimeCode
+                                    placeholder=""
+                                    error={pinError}
+                                    type="number"
+                                    onChange={async (event) => {
+                                        if (event.length < 5) {
+                                            setPinError(false)
+                                        } else if (event.length === 5) {
+                                            const pass =
+                                                await userManager.validatePassword(
+                                                    email,
+                                                    event
+                                                )
+                                            if (pass.data) {
+                                                handleLogin(email)
+                                                setEmail("")
+                                            } else {
+                                                setPinError(true)
+                                            }
                                         }
-                                    }
-                                }}
-                            />
+                                    }}
+                                />
+                            </FocusTrap>
                         </div>
                         <div className={style.button}>
                             <Button
@@ -116,7 +119,9 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
                                 color="red"
                                 size="sm"
                                 fullWidth
-                                onClick={handleSubmit}>
+                                onClick={async () => {
+                                    await userManager.getPassword(email)
+                                }}>
                                 Resend Code
                             </Button>
                         </div>
@@ -130,17 +135,19 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
                 Please enter your USC email.
             </Text>
             <div className={style.input}>
-                <TextInput
-                    variant="filled"
-                    radius="sm"
-                    error={error}
-                    placeholder="tommy@usc.edu"
-                    leftSection={icon}
-                    onChange={(event) => {
-                        setEmail(event.currentTarget.value)
-                        setError("")
-                    }}
-                />
+                <FocusTrap active={true}>
+                    <TextInput
+                        variant="filled"
+                        radius="sm"
+                        error={error}
+                        placeholder="tommy@usc.edu"
+                        leftSection={icon}
+                        onChange={(event) => {
+                            setEmail(event.currentTarget.value)
+                            setError("")
+                        }}
+                    />
+                </FocusTrap>
             </div>
             <div className={style.button}>
                 <Button
