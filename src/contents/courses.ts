@@ -7,7 +7,8 @@ import { StorageManager } from "~/backend/managers"
 import * as Constants from "~/constants"
 import { COURSE_BIN_URL } from "~/constants"
 import appendWatchlistButton from "~/ui/components/watchlistButton"
-import { WatchlistManager } from "~backend/managers"
+import appendStarRating from "~ui/components/starRating"
+import { WatchlistManager, RatingManager} from "~backend/managers"
 import { parseCourseBin } from "~backend/parsers/courseBin"
 import { overlaps } from "~backend/utils"
 
@@ -36,10 +37,11 @@ $(document).ready(async function () {
     if (!(await storageManager.get("watchlistCached"))) {
         await new WatchlistManager().getWatchlist()
     }
-
+    const department = $("h3").text().trim()
     /**
      * Parse course page and extract course capacity information.
      * Apply color formatting and insert elements as needed.
+     * Add rate my professor rating in the form of stars
      */
     $("div.course-header").each(function () {
         var numRegistered: number = 0
@@ -56,7 +58,7 @@ $(document).ready(async function () {
             $(this)
                 .find("span:has(> span:contains('Registered:'))")
                 .find("span:not(:contains('Registered:'))")
-                .each(function () {
+                .each(async function () {
                     const text = $(this)
                         .text()
                         .match(/(\d+) of (\d+)/)
@@ -140,6 +142,18 @@ $(document).ready(async function () {
                             id.substring(id.indexOf("_") + 1, id.indexOf("-"))
                         )
                     }
+                    const ratingManager = new RatingManager()
+                    const professor = parent.find("span:has(> span:contains('Instructor:'))")
+                    .find("span:not(:contains('Instructor:'))")
+                    .text()
+                    .trim()
+                    if (professor)
+                        {
+                            const last_name = professor.substring(0, professor.indexOf(','))
+                            const first_name = professor.substring(professor.indexOf(',')+2)
+                            const data = await ratingManager.getProfessor(first_name, last_name, department)
+                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0], data[4], data[0])    
+                        }
                 })
         })
         $(row)
