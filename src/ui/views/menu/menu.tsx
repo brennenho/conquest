@@ -11,6 +11,7 @@ import { useState } from "react"
 
 import style from "./menu.module.scss"
 
+// Data for links in menu
 const data = [
     {
         icon: IconHomeFilled,
@@ -97,6 +98,7 @@ export const Menu: React.FC<MenuProps> = ({
                     </div>
                 }
             </Modal>
+            {/* Manually build drawer to avoid covering header */}
             <Drawer.Root
                 opened={menuOpened}
                 onClose={toggleMenu}

@@ -14,6 +14,7 @@ function App() {
     const [email, setEmail] = useState<string | null>(null)
     const storageManager = new StorageManager()
 
+    // On startup, check if user is logged in
     useEffect(() => {
         const checkStoredEmail = async () => {
             const storedEmail = await storageManager.get("userEmail")
@@ -25,10 +26,6 @@ function App() {
 
         checkStoredEmail()
     }, [])
-
-    const switchView = (view: string) => {
-        setCurrentView(view)
-    }
 
     const handleLogout = async () => {
         await new UserManager().setValidationWindow(false)
@@ -46,7 +43,7 @@ function App() {
 
     const theme = createTheme({
         fontFamily: "Open Sans, sans-serif",
-        defaultRadius: "md"
+        defaultRadius: "sm"
     })
 
     return (
