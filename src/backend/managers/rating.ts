@@ -7,6 +7,6 @@ export class RatingManager{
             last_name,
             department
         })
-        return result.data.result[4]
+        return result.data.result
     }
 }

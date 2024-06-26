@@ -160,7 +160,7 @@ $(document).ready(async function () {
                             const last_name = professor.substring(0, professor.indexOf(','))
                             const first_name = professor.substring(professor.indexOf(',')+2)
                             const data = await ratingManager.getProfessor(first_name, last_name, department)
-                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0], data)    
+                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0], data[4], data[1])    
                         }
                 })
         })  

@@ -23,12 +23,14 @@ const StarRating: React.FC<StarRatingProps> = ({
 
 const appendStarRating = (
     target: HTMLElement,
-    rating: string
+    rating: string,
+    professorId: string
 ) => {
     const container = document.createElement("div")
     target.appendChild(container)
 
     const root = createRoot(container)
-    root.render(<a href="//google.com" target="_blank"><StarRating ratings={rating}/></a>)
+    const url = `//www.ratemyprofessors.com/professor/${professorId}`
+    root.render(<a href={url} target="_blank"><StarRating ratings={rating}/></a>)
 }
 export default appendStarRating
