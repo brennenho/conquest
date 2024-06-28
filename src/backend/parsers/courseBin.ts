@@ -83,7 +83,6 @@ export async function parseCourseBin(html: string) {
             })
         const storageManager = new StorageManager()
         await storageManager.set("registeredCourses", courses)
-        console.log("COURSES:", courses)
         await storageManager.set("registeredCoursesCached", true)
 
         return courses

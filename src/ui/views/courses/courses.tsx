@@ -55,7 +55,6 @@ export const CoursesView: React.FC = () => {
         getCourses()
     }, [])
 
-    console.log(mappedCourses)
     return (
         <ScrollArea h={350} type="auto" scrollbarSize={6}>
             {Object.values(mappedCourses).map((course) => (

@@ -7,7 +7,6 @@ export class RatingManager {
         last_name: string,
         department: string
     ) {
-        console.log("getProfessor")
         const result = await this._httpClient.post(
             "/professors/search-professor",
             {

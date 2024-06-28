@@ -16,7 +16,6 @@ export const config: PlasmoCSConfig = {
 $(document).ready(async function () {
     const storageManager = new StorageManager()
     const updated = await storageManager.get("registeredCoursesCached")
-    console.log("UPDATED: ", updated)
     if (!updated) {
         const html = await fetch(COURSE_BIN_URL)
         await parseCourseBin(await html.text())
