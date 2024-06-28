@@ -16,6 +16,7 @@ export const CoursesView: React.FC = () => {
             const courses: { [key: string]: any } =
                 await storageManager.get("registeredCourses")
 
+            // Restructure course data for easier rendering
             const newMappedCourses: { [key: string]: any } = {}
             Object.entries(courses).forEach(([sectionId, sectionDetails]) => {
                 const [

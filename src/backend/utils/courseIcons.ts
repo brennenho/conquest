@@ -1,3 +1,8 @@
+/**
+ * This file contains a mapping of department prefixes to icons and colors.
+ * Each school is associated with a different color.
+ */
+
 import {
     IconActivityHeartbeat,
     IconAd2,

@@ -28,6 +28,7 @@ export const Course: React.FC<CourseProps> = ({
     return (
         <div className={style.container}>
             <div className={style.info}>
+                {/* White icons are a different variant */}
                 {color !== "white" ? (
                     <Avatar
                         color={color}

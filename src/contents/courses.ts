@@ -156,18 +156,18 @@ $(document).ready(async function () {
                         const first_name = professor.substring(
                             professor.indexOf(",") + 2
                         )
-                        // const data = await ratingManager.getProfessor(
-                        //     first_name,
-                        //     last_name,
-                        //     department
-                        // )
-                        // appendStarRating(
-                        //     $(parent).find(
-                        //         "span:has(> span:contains('Instructor:'))"
-                        //     )[0],
-                        //     data[4],
-                        //     data[0]
-                        // )
+                        const data = await ratingManager.getProfessor(
+                            first_name,
+                            last_name,
+                            department
+                        )
+                        appendStarRating(
+                            $(parent).find(
+                                "span:has(> span:contains('Instructor:'))"
+                            )[0],
+                            data[4],
+                            data[0]
+                        )
                     }
                 })
         })

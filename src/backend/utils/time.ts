@@ -16,6 +16,11 @@ export function timeToMins(time: string): number {
     return hours24 * 60 + parseInt(minutes, 10)
 }
 
+/**
+ * Convert minutes from midnight to time string
+ * @param mins (from midnight)
+ * @returns time string in format "hh:mm(am/pm)"
+ */
 export function minsToTime(mins: number): string {
     let hours = Math.floor(mins / 60)
     const minutes = mins % 60
@@ -30,6 +35,11 @@ export function minsToTime(mins: number): string {
     return `${hours}:${formattedMinutes}${period}`
 }
 
+/**
+ * Converts a string of days to a bitmask
+ * @param days
+ * @returns bitmask
+ */
 export function daysToBitmask(days: string) {
     const daysMap = {
         M: 1 << 0,
@@ -50,6 +60,14 @@ export function daysToBitmask(days: string) {
     return bitmask
 }
 
+/**
+ * Checks if a given course overlaps with any registered courses
+ * @param days
+ * @param startTime
+ * @param endTime
+ * @param courses
+ * @returns course name if overlap, null otherwise
+ */
 export function overlaps(
     days: string,
     startTime: string,

@@ -5,6 +5,10 @@ import { StorageManager } from "~backend/managers"
 import { parseCourseBin } from "~backend/parsers/courseBin"
 import { COURSE_BIN_URL } from "~constants"
 
+/**
+ * This content script is injected into the webreg.usc.edu domain.
+ * It ensures the latest course bin is read for use in the extension.
+ */
 export const config: PlasmoCSConfig = {
     matches: ["https://webreg.usc.edu/*"],
     exclude_matches: [
