@@ -1,10 +1,12 @@
-import { Button, Text } from "@mantine/core"
+import { Button, ScrollArea, Text } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import React, { useState } from "react"
 
-import { Header } from "~ui/components"
+import { courseIcons } from "~backend/utils"
+import { Course, Header } from "~ui/components"
 import { Menu } from "~ui/views"
 
+import { CoursesView } from "../courses/courses"
 import style from "./home.module.scss"
 
 interface HomeViewProps {
@@ -28,20 +30,25 @@ export const HomeView: React.FC<HomeViewProps> = ({ email, handleLogout }) => {
             />
             {view === "home" && (
                 <>
-                    <Text fw={500} ta="center">
-                        Welcome {email}
-                    </Text>
-                    <div className={style.button}>
-                        <Button
-                            variant="light"
-                            color="red"
-                            size="sm"
-                            fullWidth
-                            onClick={handleLogout}>
-                            Logout
-                        </Button>
-                    </div>
+                    <CoursesView />
                 </>
+            )}
+            {view === "about" && (
+                <ScrollArea h={350} type="auto" scrollbarSize={6}>
+                    {Object.entries(courseIcons).map(
+                        ([key, { Icon, color }]) => (
+                            <Course
+                                key={key}
+                                name={key}
+                                professor={"Professor"}
+                                school={"temp"}
+                                days={"MWF"}
+                                startTime={"8:00 AM"}
+                                endTime={"9:00 AM"}
+                            />
+                        )
+                    )}
+                </ScrollArea>
             )}
         </div>
     )

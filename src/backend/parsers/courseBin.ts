@@ -1,7 +1,7 @@
 import $ from "jquery"
 
 import { StorageManager } from "../managers"
-import { daysToBitmask, timeToMins } from "../utils"
+import { timeToMins } from "../utils"
 
 export async function parseCourseBin(html: string) {
     try {
@@ -49,12 +49,32 @@ export async function parseCourseBin(html: string) {
                                                 .text()
                                                 .trim()
 
-                                            // stored as [course, days, start, end]
+                                            const professor = parent
+                                                .find(
+                                                    "span:has(> span:contains('Instructor:'))"
+                                                )
+                                                .find(
+                                                    "span:not(:contains('Instructor:'))"
+                                                )
+                                                .text()
+                                                .trim()
+
+                                            const type = parent
+                                                .find(
+                                                    "span.course-section-mixed, span.course-section-lecture"
+                                                )
+                                                .text()
+                                                .trim()
+                                                .replace(/^Type:|\s+/g, "")
+
+                                            // stored as [course, days, start, end, professor, session]
                                             courses[parts[3]] = [
                                                 course,
-                                                daysToBitmask(days),
+                                                days,
                                                 timeToMins(time[0]),
-                                                timeToMins(time[1])
+                                                timeToMins(time[1]),
+                                                professor,
+                                                type.length > 0 ? true : false
                                             ]
                                         }
                                     })
@@ -63,6 +83,7 @@ export async function parseCourseBin(html: string) {
             })
         const storageManager = new StorageManager()
         await storageManager.set("registeredCourses", courses)
+        console.log("COURSES:", courses)
         await storageManager.set("registeredCoursesCached", true)
 
         return courses

@@ -16,6 +16,20 @@ export function timeToMins(time: string): number {
     return hours24 * 60 + parseInt(minutes, 10)
 }
 
+export function minsToTime(mins: number): string {
+    let hours = Math.floor(mins / 60)
+    const minutes = mins % 60
+
+    const period = hours >= 12 ? "PM" : "AM"
+
+    hours = hours % 12
+    hours = hours === 0 ? 12 : hours
+
+    const formattedMinutes = minutes.toString().padStart(2, "0")
+
+    return `${hours}:${formattedMinutes}${period}`
+}
+
 export function daysToBitmask(days: string) {
     const daysMap = {
         M: 1 << 0,
@@ -52,7 +66,7 @@ export function overlaps(
 
         for (const section in courses) {
             const course = courses[section]
-            const existingDaysBitmask = course[1]
+            const existingDaysBitmask = daysToBitmask(course[1])
             const existingStartTime = course[2]
             const existingEndTime = course[3]
 

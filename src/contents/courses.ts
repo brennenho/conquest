@@ -7,10 +7,10 @@ import { StorageManager } from "~/backend/managers"
 import * as Constants from "~/constants"
 import { COURSE_BIN_URL } from "~/constants"
 import appendWatchlistButton from "~/ui/components/watchlistButton"
-import appendStarRating from "~ui/components/starRating"
-import { WatchlistManager, RatingManager} from "~backend/managers"
+import { RatingManager, WatchlistManager } from "~backend/managers"
 import { parseCourseBin } from "~backend/parsers/courseBin"
 import { overlaps } from "~backend/utils"
+import appendStarRating from "~ui/components/starRating"
 
 export const config: PlasmoCSConfig = {
     matches: ["https://webreg.usc.edu/Courses*"]
@@ -143,17 +143,32 @@ $(document).ready(async function () {
                         )
                     }
                     const ratingManager = new RatingManager()
-                    const professor = parent.find("span:has(> span:contains('Instructor:'))")
-                    .find("span:not(:contains('Instructor:'))")
-                    .text()
-                    .trim()
-                    if (professor)
-                        {
-                            const last_name = professor.substring(0, professor.indexOf(','))
-                            const first_name = professor.substring(professor.indexOf(',')+2)
-                            const data = await ratingManager.getProfessor(first_name, last_name, department)
-                            appendStarRating($(parent).find("span:has(> span:contains('Instructor:'))")[0], data[4], data[0])    
-                        }
+                    const professor = parent
+                        .find("span:has(> span:contains('Instructor:'))")
+                        .find("span:not(:contains('Instructor:'))")
+                        .text()
+                        .trim()
+                    if (professor) {
+                        const last_name = professor.substring(
+                            0,
+                            professor.indexOf(",")
+                        )
+                        const first_name = professor.substring(
+                            professor.indexOf(",") + 2
+                        )
+                        // const data = await ratingManager.getProfessor(
+                        //     first_name,
+                        //     last_name,
+                        //     department
+                        // )
+                        // appendStarRating(
+                        //     $(parent).find(
+                        //         "span:has(> span:contains('Instructor:'))"
+                        //     )[0],
+                        //     data[4],
+                        //     data[0]
+                        // )
+                    }
                 })
         })
         $(row)
