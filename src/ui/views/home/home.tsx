@@ -1,11 +1,12 @@
-import { Button, Text } from "@mantine/core"
+import { ScrollArea } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import React, { useState } from "react"
 
-import { Header } from "~ui/components"
+import { courseIcons } from "~backend/utils"
+import { Course, Header } from "~ui/components"
 import { Menu } from "~ui/views"
 
-import style from "./home.module.scss"
+import { CoursesView } from "../courses/courses"
 
 interface HomeViewProps {
     email: string
@@ -26,22 +27,23 @@ export const HomeView: React.FC<HomeViewProps> = ({ email, handleLogout }) => {
                 setCurrentView={setView}
                 handleLogout={handleLogout}
             />
-            {view === "home" && (
-                <>
-                    <Text fw={500} ta="center">
-                        Welcome {email}
-                    </Text>
-                    <div className={style.button}>
-                        <Button
-                            variant="light"
-                            color="red"
-                            size="sm"
-                            fullWidth
-                            onClick={handleLogout}>
-                            Logout
-                        </Button>
-                    </div>
-                </>
+            {view === "home" && <CoursesView />}
+            {view === "about" && (
+                <ScrollArea h={350} type="auto" scrollbarSize={6}>
+                    {/* Temporary view to display all courses */}
+                    {Object.entries(courseIcons).map(
+                        ([key, { Icon, color }]) => (
+                            <Course
+                                key={key}
+                                name={key}
+                                professor={"Professor"}
+                                days={"MWF"}
+                                startTime={"8:00 AM"}
+                                endTime={"9:00 AM"}
+                            />
+                        )
+                    )}
+                </ScrollArea>
             )}
         </div>
     )
