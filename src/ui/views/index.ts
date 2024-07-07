@@ -1,3 +1,5 @@
 export * from "./login/login"
 export * from "./home/home"
 export * from "./menu/menu"
+export * from "./courses/courses"
+export * from "./watchlist/watchlist"

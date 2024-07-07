@@ -6,11 +6,10 @@ import { Storage } from "@plasmohq/storage"
 import { StorageManager } from "~/backend/managers"
 import * as Constants from "~/constants"
 import { COURSE_BIN_URL } from "~/constants"
-import appendWatchlistButton from "~/ui/components/watchlistButton"
+import { appendStarRating, appendWatchlistButton } from "~/ui/components/"
 import { RatingManager, WatchlistManager } from "~backend/managers"
 import { parseCourseBin } from "~backend/parsers/courseBin"
 import { overlaps } from "~backend/utils"
-import appendStarRating from "~ui/components/starRating"
 
 export const config: PlasmoCSConfig = {
     matches: ["https://webreg.usc.edu/Courses*"]
@@ -18,7 +17,7 @@ export const config: PlasmoCSConfig = {
 
 const storage = new Storage()
 storage.watch({
-    watchlistCached: (c) => {
+    watchlist: (c) => {
         window.location.reload()
     }
 })
@@ -34,9 +33,8 @@ $(document).ready(async function () {
         const html = await fetch(COURSE_BIN_URL)
         courses = await parseCourseBin(await html.text())
     }
-    if (!(await storageManager.get("watchlistCached"))) {
-        await new WatchlistManager().getWatchlist()
-    }
+    await new WatchlistManager().getWatchlist()
+
     const department = $("h3").text().trim()
     /**
      * Parse course page and extract course capacity information.

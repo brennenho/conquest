@@ -7,14 +7,18 @@ export class RatingManager {
         last_name: string,
         department: string
     ) {
-        const result = await this._httpClient.post(
-            "/professors/search-professor",
-            {
-                first_name,
-                last_name,
-                department
-            }
-        )
-        return result.data.result
+        try {
+            const result = await this._httpClient.post(
+                "/search/search-professor",
+                {
+                    first_name,
+                    last_name,
+                    department
+                }
+            )
+            return result.data.result
+        } catch (e) {
+            console.log(`Suppressing RMP error ${e}`)
+        }
     }
 }

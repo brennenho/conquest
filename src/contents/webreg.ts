@@ -18,8 +18,10 @@ export const config: PlasmoCSConfig = {
 }
 
 $(document).ready(async function () {
+    console.log("Webreg content script initialized")
     const storageManager = new StorageManager()
     const updated = await storageManager.get("registeredCoursesCached")
+    console.log(updated)
     if (!updated) {
         const html = await fetch(COURSE_BIN_URL)
         await parseCourseBin(await html.text())

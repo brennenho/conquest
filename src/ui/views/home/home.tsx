@@ -6,7 +6,7 @@ import { courseIcons } from "~backend/utils"
 import { Course, Header } from "~ui/components"
 import { Menu } from "~ui/views"
 
-import { CoursesView } from "../courses/courses"
+import { CoursesView, WatchlistView } from ".."
 
 interface HomeViewProps {
     email: string
@@ -19,7 +19,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ email, handleLogout }) => {
 
     return (
         <div>
-            <Header menuOpened={menuOpened} onClick={toggle} />
+            <Header title={view} menuOpened={menuOpened} onClick={toggle} />
             <Menu
                 email={email}
                 menuOpened={menuOpened}
@@ -28,6 +28,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ email, handleLogout }) => {
                 handleLogout={handleLogout}
             />
             {view === "home" && <CoursesView />}
+            {view === "watchlist" && <WatchlistView />}
             {view === "about" && (
                 <ScrollArea h={350} type="auto" scrollbarSize={6}>
                     {/* Temporary view to display all courses */}

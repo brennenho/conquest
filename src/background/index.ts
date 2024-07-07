@@ -5,4 +5,3 @@ console.log("Background script initalized")
 const storageManager = new StorageManager()
 // Erase caching on initial load of extension
 storageManager.set("registeredCoursesCached", false)
-storageManager.set("watchlistCached", false)

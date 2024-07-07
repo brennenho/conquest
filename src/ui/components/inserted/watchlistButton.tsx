@@ -57,7 +57,7 @@ const WatchlistButton: React.FC<WatchlistButtonProps> = ({
     )
 }
 
-const appendWatchlistButton = (
+export const appendWatchlistButton = (
     target: HTMLElement,
     section_id: string,
     department: string

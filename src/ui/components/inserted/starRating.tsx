@@ -1,27 +1,27 @@
 import React from "react"
-import Ratings from 'react-ratings-declarative';
 import { createRoot } from "react-dom/client"
+import Ratings from "react-ratings-declarative"
+
 type StarRatingProps = {
     ratings: string
 }
 
-const StarRating: React.FC<StarRatingProps> = ({
-    ratings
-}) => {
-    return (<Ratings
-        rating={Number(ratings)}
-        widgetDimensions="15px"
-        widgetSpacings="2px"
-      >
-        <Ratings.Widget widgetRatedColor="rgb(0,0,0)"/>
-        <Ratings.Widget widgetRatedColor="rgb(0,0,0)"/>
-        <Ratings.Widget widgetRatedColor="rgb(0,0,0)"/>
-        <Ratings.Widget widgetRatedColor="rgb(0,0,0)"/>
-        <Ratings.Widget widgetRatedColor="rgb(0,0,0)"/>
-      </Ratings>)
+const StarRating: React.FC<StarRatingProps> = ({ ratings }) => {
+    return (
+        <Ratings
+            rating={Number(ratings)}
+            widgetDimensions="15px"
+            widgetSpacings="2px">
+            <Ratings.Widget widgetRatedColor="rgb(0,0,0)" />
+            <Ratings.Widget widgetRatedColor="rgb(0,0,0)" />
+            <Ratings.Widget widgetRatedColor="rgb(0,0,0)" />
+            <Ratings.Widget widgetRatedColor="rgb(0,0,0)" />
+            <Ratings.Widget widgetRatedColor="rgb(0,0,0)" />
+        </Ratings>
+    )
 }
 
-const appendStarRating = (
+export const appendStarRating = (
     target: HTMLElement,
     rating: string,
     professorId: string
@@ -31,6 +31,10 @@ const appendStarRating = (
 
     const root = createRoot(container)
     const url = `//www.ratemyprofessors.com/professor/${professorId}`
-    root.render(<a href={url} target="_blank"><StarRating ratings={rating}/></a>)
+    root.render(
+        <a href={url} target="_blank">
+            <StarRating ratings={rating} />
+        </a>
+    )
 }
 export default appendStarRating

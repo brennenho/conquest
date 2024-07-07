@@ -19,7 +19,7 @@ export function timeToMins(time: string): number {
 /**
  * Convert minutes from midnight to time string
  * @param mins (from midnight)
- * @returns time string in format "hh:mm(am/pm)"
+ * @returns time string in format "hh:mm (am/pm)"
  */
 export function minsToTime(mins: number): string {
     let hours = Math.floor(mins / 60)
@@ -32,7 +32,22 @@ export function minsToTime(mins: number): string {
 
     const formattedMinutes = minutes.toString().padStart(2, "0")
 
-    return `${hours}:${formattedMinutes}${period}`
+    return `${hours}:${formattedMinutes} ${period}`
+}
+
+/**
+ * Converts a military time string to a 12-hour time string
+ * @param militaryTime (string) - military time string in format "hh:mm"
+ * @returns 12-hour time string in format "hh:mm (am/pm)"
+ */
+export function militaryToStandard(militaryTime: string): string {
+    const [hours, minutes] = militaryTime.split(":")
+    const hoursInt = parseInt(hours, 10)
+    let hours12 = hoursInt % 12
+    const period = hoursInt >= 12 ? "PM" : "AM"
+    hours12 = hours12 === 0 ? 12 : hours12
+    const formattedMinutes = minutes.padStart(2, "0")
+    return `${hours12}:${formattedMinutes} ${period}`
 }
 
 /**
