@@ -1,0 +1,47 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 280px;
+    height: 55px;
+    border-radius: 5px;
+    background: #3d3a3a;
+    flex-shrink: 0;
+    color: #fff;
+    padding: 10px;
+    justify-content: space-between;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+}
+
+.name {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    line-height: 0.8;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    margin: 5px;
+}
+
+.text {
+    line-height: 1.1;
+}
+
+.remove {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}

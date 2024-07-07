@@ -1,12 +1,11 @@
-import { ScrollArea } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 import React, { useState } from "react"
 
-import { courseIcons } from "~backend/utils"
-import { Course, Header } from "~ui/components"
+import { Header } from "~ui/components"
+import sharedStyles from "~ui/sharedStyles.module.scss"
 import { Menu } from "~ui/views"
 
-import { CoursesView } from "../courses/courses"
+import { AboutView, CoursesView, WatchlistView } from ".."
 
 interface HomeViewProps {
     email: string
@@ -18,8 +17,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ email, handleLogout }) => {
     const [view, setView] = useState<string>("home")
 
     return (
-        <div>
-            <Header menuOpened={menuOpened} onClick={toggle} />
+        <div className={sharedStyles.fullHeight}>
+            <Header title={view} menuOpened={menuOpened} onClick={toggle} />
             <Menu
                 email={email}
                 menuOpened={menuOpened}
@@ -28,23 +27,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ email, handleLogout }) => {
                 handleLogout={handleLogout}
             />
             {view === "home" && <CoursesView />}
-            {view === "about" && (
-                <ScrollArea h={350} type="auto" scrollbarSize={6}>
-                    {/* Temporary view to display all courses */}
-                    {Object.entries(courseIcons).map(
-                        ([key, { Icon, color }]) => (
-                            <Course
-                                key={key}
-                                name={key}
-                                professor={"Professor"}
-                                days={"MWF"}
-                                startTime={"8:00 AM"}
-                                endTime={"9:00 AM"}
-                            />
-                        )
-                    )}
-                </ScrollArea>
-            )}
+            {view === "watchlist" && <WatchlistView />}
+            {view === "about" && <AboutView />}
         </div>
     )
 }

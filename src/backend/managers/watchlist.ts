@@ -34,7 +34,11 @@ export class WatchlistManager {
         // Set watchlist button if addition was successful
         if (response.status === 200) {
             setLabel("Remove from watchlist")
-            this._storageManager.set(sectionId, email)
+            this._storageManager.addToDictionary(
+                "watchlist",
+                sectionId,
+                response.data
+            )
         } else {
             setLabel("Failed. Try again.")
         }
@@ -69,15 +73,36 @@ export class WatchlistManager {
         // Reset watchlist button if deletion was successful
         if (response.status === 200) {
             setLabel("Add to watchlist")
-            this._storageManager.remove(sectionId)
+            this._storageManager.removeFromDictionary("watchlist", sectionId)
         } else {
             setLabel("Failed. Try again.")
         }
     }
 
+    public async removeFromWatchlistFromPopup(sectionId: string) {
+        const email = await this._storageManager.get("userEmail")
+        if (!email) {
+            console.log("User not logged in.")
+            return
+        }
+
+        const request = {
+            section_id: sectionId,
+            email: email
+        }
+
+        const response = await this._httpClient.post(
+            "/watchlist/delete",
+            request
+        )
+
+        if (response.status === 200) {
+            this._storageManager.removeFromDictionary("watchlist", sectionId)
+        }
+    }
+
     /**
-     * Send a request to the server to get the user's watchlist.
-     * @returns
+     * Get the user's watchlist.
      */
     public async getWatchlist() {
         const email = await this._storageManager.get("userEmail")
@@ -86,12 +111,15 @@ export class WatchlistManager {
             return
         }
 
+        const cached = await this._storageManager.get("watchlist")
+        if (cached) {
+            return cached
+        }
+
         const response = await this._httpClient.post("/watchlist/search", email)
         if (response.status === 200) {
-            for (const section of response.data) {
-                await this._storageManager.set(section.section_id, email)
-            }
-            this._storageManager.set("watchlistCached", true)
+            await this._storageManager.set("watchlist", response.data)
+            return response.data
         }
 
         return
@@ -109,23 +137,14 @@ export class WatchlistManager {
             return false
         }
 
-        // Check if currently logged in user is watching the section
-        const status = await this._storageManager.get(sectionId)
-        if (status === email) {
-            return true
-        }
-
-        // Current user has no status stored, check if a server request has been made
-        const cached = await this._storageManager.get("watchlistCached")
-        if (cached) {
+        const watchlist = await this.getWatchlist()
+        if (watchlist) {
+            if (watchlist[sectionId]) {
+                return true
+            }
             return false
         }
 
-        // This user hasn't made a search request to the server yet
-        this.getWatchlist()
-
-        // User is not watching this section, remove any stored status
-        await this._storageManager.remove(sectionId)
         return false
     }
 }

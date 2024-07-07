@@ -1,4 +1,5 @@
-export * from "./watchlistButton"
+export * from "./inserted/watchlistButton"
 export * from "./header/header"
-export * from "./starRating"
+export * from "./inserted/starRating"
 export * from "./course/course"
+export * from "./watchlistCourse/watchlistCourse"

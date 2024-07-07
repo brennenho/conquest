@@ -33,10 +33,33 @@ body {
     width: 100%;
 }
 
+.alignCenter {
+    align-items: center;
+}
+
+.justifyCenter {
+    justify-content: center;
+}
+
 .textCentered {
     text-align: center;
 }
 
 .noMargin {
     margin: 0;
+}
+
+.margin5 {
+    margin: 5px;
+}
+
+.margin10 {
+    margin: 10px;
+}
+
+.button {
+    width: 100%;
+    height: 40px;
+    margin-top: 40px;
+    padding: 0 40px;
 }
