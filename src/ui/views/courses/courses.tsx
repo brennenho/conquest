@@ -62,7 +62,7 @@ export const CoursesView: React.FC = () => {
     }, [])
 
     return (
-        <ScrollArea h={350} type="auto" scrollbarSize={6}>
+        <ScrollArea.Autosize mah={345} type="auto" scrollbarSize={6}>
             {Object.keys(mappedCourses).length === 0 ? (
                 <>
                     <Text
@@ -101,6 +101,6 @@ export const CoursesView: React.FC = () => {
                     </React.Fragment>
                 ))
             )}
-        </ScrollArea>
+        </ScrollArea.Autosize>
     )
 }

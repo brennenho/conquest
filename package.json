@@ -17,6 +17,7 @@
         "@fontsource/roboto": "^5.0.13",
         "@mantine/core": "^7.10.2",
         "@mantine/hooks": "^7.10.2",
+        "@mantine/notifications": "^7.11.2",
         "@mui/icons-material": "^5.15.20",
         "@mui/styles": "^5.15.20",
         "@plasmohq/messaging": "^0.6.2",
@@ -48,6 +49,16 @@
         "permissions": [
             "tabs",
             "notifications"
+        ],
+        "web_accessible_resources": [
+            {
+                "resources": [
+                    "assets/icon.png"
+                ],
+                "matches": [
+                    "<all_urls>"
+                ]
+            }
         ]
     }
 }

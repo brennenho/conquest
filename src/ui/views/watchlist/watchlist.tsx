@@ -1,8 +1,8 @@
-import { Button, ScrollArea, Text } from "@mantine/core"
+import { ScrollArea, Text } from "@mantine/core"
 import React, { useEffect, useState } from "react"
 
 import { WatchlistManager } from "~backend/managers"
-import { militaryToStandard } from "~backend/utils"
+import { errorNotification, militaryToStandard } from "~backend/utils"
 import { WatchlistCourse } from "~ui/components"
 import sharedStyles from "~ui/sharedStyles.module.scss"
 
@@ -17,13 +17,17 @@ export const WatchlistView: React.FC = () => {
     useEffect(() => {
         const getWatchlist = async () => {
             const manager = new WatchlistManager()
-            const response = await manager.getWatchlist()
-            setCourses(response)
+            try {
+                const response = await manager.getWatchlist()
+                setCourses(response)
+            } catch (e) {
+                errorNotification("Failed to load watchlist")
+            }
         }
         getWatchlist()
     }, [reload])
     return (
-        <ScrollArea h={350} type="auto" scrollbarSize={6}>
+        <ScrollArea.Autosize mah={345} type="auto" scrollbarSize={6}>
             {Object.keys(courses).length === 0 ? (
                 <>
                     <Text
@@ -62,6 +66,6 @@ export const WatchlistView: React.FC = () => {
                     ))}
                 </>
             )}
-        </ScrollArea>
+        </ScrollArea.Autosize>
     )
 }

@@ -18,7 +18,9 @@ export class RatingManager {
             )
             return result.data.result
         } catch (e) {
-            console.log(`Suppressing RMP error ${e}`)
+            console.log(
+                `Error searching for professor: ${first_name} ${last_name}`
+            )
         }
     }
 }

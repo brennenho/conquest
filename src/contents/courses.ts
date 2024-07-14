@@ -17,8 +17,9 @@ export const config: PlasmoCSConfig = {
 
 const storage = new Storage()
 storage.watch({
-    watchlist: (c) => {
+    courseReload: (c) => {
         window.location.reload()
+        storage.set("courseReload", false)
     }
 })
 
@@ -33,7 +34,12 @@ $(document).ready(async function () {
         const html = await fetch(COURSE_BIN_URL)
         courses = await parseCourseBin(await html.text())
     }
-    await new WatchlistManager().getWatchlist()
+
+    try {
+        await new WatchlistManager().getWatchlist()
+    } catch (e) {
+        console.log(`Error getting watchlist: ${e}`)
+    }
 
     const department = $("h3").text().trim()
     /**
@@ -159,13 +165,15 @@ $(document).ready(async function () {
                             last_name,
                             department
                         )
-                        appendStarRating(
-                            $(parent).find(
-                                "span:has(> span:contains('Instructor:'))"
-                            )[0],
-                            data[4],
-                            data[0]
-                        )
+                        if (data) {
+                            appendStarRating(
+                                $(parent).find(
+                                    "span:has(> span:contains('Instructor:'))"
+                                )[0],
+                                data[4],
+                                data[0]
+                            )
+                        }
                     }
                 })
         })

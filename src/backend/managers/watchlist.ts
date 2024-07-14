@@ -1,3 +1,7 @@
+import { sendToBackground } from "@plasmohq/messaging"
+
+import { errorNotification } from "~backend/utils"
+
 import { StorageManager } from "."
 import { HTTPClient } from "../../backend/http"
 
@@ -14,13 +18,18 @@ export class WatchlistManager {
      */
     public async addToWatchlist(
         sectionId: string,
-        department: string,
-        setLabel: (label: string) => void
-    ) {
+        department: string
+    ): Promise<boolean> {
         const email = await this._storageManager.get("userEmail")
         if (!email) {
-            console.error("User not logged in.")
-            return
+            await sendToBackground({
+                name: "chromeNotification",
+                body: {
+                    title: "Not logged in",
+                    message: "Please log in to edit your watchlist"
+                }
+            })
+            return false
         }
 
         const request = {
@@ -29,18 +38,30 @@ export class WatchlistManager {
             email: email
         }
 
-        const response = await this._httpClient.post("/watchlist/add", request)
+        let response = null
+        try {
+            response = await this._httpClient.post("/watchlist/add", request)
+        } catch (e) {
+            // Suppress error
+        }
 
         // Set watchlist button if addition was successful
-        if (response.status === 200) {
-            setLabel("Remove from watchlist")
+        if (response && response.status === 200) {
             this._storageManager.addToDictionary(
                 "watchlist",
                 sectionId,
                 response.data
             )
+            return true
         } else {
-            setLabel("Failed. Try again.")
+            await sendToBackground({
+                name: "chromeNotification",
+                body: {
+                    title: "Error adding to watchlist",
+                    message: "Please try again later"
+                }
+            })
+            return false
         }
     }
 
@@ -50,54 +71,80 @@ export class WatchlistManager {
      * @param setLabel
      * @returns
      */
-    public async removeFromWatchlist(
-        sectionId: string,
-        setLabel: (label: string) => void
-    ) {
+    public async removeFromWatchlist(sectionId: string): Promise<boolean> {
         const email = await this._storageManager.get("userEmail")
         if (!email) {
-            console.log("User not logged in.")
-            return
+            await sendToBackground({
+                name: "chromeNotification",
+                body: {
+                    title: "Not logged in",
+                    message: "Please log in to edit your watchlist"
+                }
+            })
+            return false
         }
 
         const request = {
             section_id: sectionId,
             email: email
         }
+        let response = null
 
-        const response = await this._httpClient.post(
-            "/watchlist/delete",
-            request
-        )
+        try {
+            response = await this._httpClient.post("/watchlist/delete", request)
+        } catch (e) {
+            // Suppress error
+        }
 
         // Reset watchlist button if deletion was successful
-        if (response.status === 200) {
-            setLabel("Add to watchlist")
+        if (response && response.status === 200) {
             this._storageManager.removeFromDictionary("watchlist", sectionId)
+            return true
         } else {
-            setLabel("Failed. Try again.")
+            await sendToBackground({
+                name: "chromeNotification",
+                body: {
+                    title: "Error removing from watchlist",
+                    message: "Please try again later"
+                }
+            })
+            return false
         }
     }
 
-    public async removeFromWatchlistFromPopup(sectionId: string) {
+    public async removeFromWatchlistFromPopup(
+        sectionId: string
+    ): Promise<boolean> {
         const email = await this._storageManager.get("userEmail")
         if (!email) {
-            console.log("User not logged in.")
-            return
+            errorNotification(
+                "Not logged in",
+                "Please log in to edit your watchlist"
+            )
+            return false
         }
 
         const request = {
             section_id: sectionId,
             email: email
         }
+        let response = null
+        try {
+            response = await this._httpClient.post("/watchlist/delete", request)
+        } catch (e) {
+            // Suppress error
+        }
 
-        const response = await this._httpClient.post(
-            "/watchlist/delete",
-            request
-        )
-
-        if (response.status === 200) {
-            this._storageManager.removeFromDictionary("watchlist", sectionId)
+        if (response && response.status === 200) {
+            await this._storageManager.removeFromDictionary(
+                "watchlist",
+                sectionId
+            )
+            await this._storageManager.set("courseReload", true)
+            return true
+        } else {
+            errorNotification()
+            return false
         }
     }
 
@@ -107,7 +154,7 @@ export class WatchlistManager {
     public async getWatchlist() {
         const email = await this._storageManager.get("userEmail")
         if (!email) {
-            console.error("User not logged in.")
+            console.log("User not logged in.")
             return
         }
 
@@ -137,11 +184,16 @@ export class WatchlistManager {
             return false
         }
 
-        const watchlist = await this.getWatchlist()
-        if (watchlist) {
-            if (watchlist[sectionId]) {
-                return true
+        try {
+            const watchlist = await this.getWatchlist()
+            if (watchlist) {
+                if (watchlist[sectionId]) {
+                    return true
+                }
+                return false
             }
+        } catch (e) {
+            console.log("Error getting watchlist status.")
             return false
         }
 

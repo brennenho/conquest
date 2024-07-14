@@ -116,7 +116,7 @@ export function overlaps(
             }
         }
     } catch (e) {
-        console.error(e)
+        console.log("Error checking for overlap: ", e)
     }
     return null
 }
