@@ -51,7 +51,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
         return emailRegex.test(email)
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!email) {
             setError("Email is required.")
             return
@@ -61,10 +61,11 @@ export const LoginView: React.FC<LoginViewProps> = ({ handleLogin }) => {
             return
         }
 
-        open()
-        userManager.setEmail(email) // Save email to storage if user exits extension
-        userManager.getPassword(email) // API call
-        userManager.setValidationWindow(true) // Save validation window state
+        if (await userManager.getPassword(email)) {
+            open()
+            await userManager.setEmail(email) // Save email to storage if user exits extension
+            await userManager.setValidationWindow(true) // Save validation window state
+        }
     }
 
     const icon = <IconAt style={{ width: rem(16), height: rem(16) }} />

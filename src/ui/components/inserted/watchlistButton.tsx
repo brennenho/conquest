@@ -39,15 +39,15 @@ const WatchlistButton: React.FC<WatchlistButtonProps> = ({
 
     const onClick = async () => {
         if (label === "Remove from watchlist") {
-            await watchlistManager.removeFromWatchlist(sectionId, setLabel)
-            setStyle(styleDefault)
+            if (await watchlistManager.removeFromWatchlist(sectionId)) {
+                setLabel("Add to watchlist")
+                setStyle(styleDefault)
+            }
         } else {
-            await watchlistManager.addToWatchlist(
-                sectionId,
-                department,
-                setLabel
-            )
-            setStyle(styleWatching)
+            if (await watchlistManager.addToWatchlist(sectionId, department)) {
+                setLabel("Remove from watchlist")
+                setStyle(styleWatching)
+            }
         }
     }
     return (

@@ -2,6 +2,8 @@ import https from "https"
 import axios from "axios"
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
 
+import { GENERIC_ERROR_MESSAGE, HTTPError } from "~backend/utils"
+
 export class HTTPClient {
     private static instance: HTTPClient
     private axiosInstance: AxiosInstance
@@ -23,6 +25,20 @@ export class HTTPClient {
         return HTTPClient.instance
     }
 
+    private handleError(e: any, url: string, method: string) {
+        if (e.response) {
+            throw new HTTPError(
+                e.response.status,
+                e.response.statusText,
+                url,
+                method,
+                e
+            )
+        } else {
+            throw new HTTPError(500, GENERIC_ERROR_MESSAGE, url, method, e)
+        }
+    }
+
     public async get(
         url: string,
         config?: AxiosRequestConfig
@@ -31,8 +47,7 @@ export class HTTPClient {
             const response = await this.axiosInstance.get(url, config)
             return response
         } catch (error) {
-            console.error("Error performing GET request:", error)
-            return undefined
+            this.handleError(error, url, "GET")
         }
     }
 
@@ -45,8 +60,7 @@ export class HTTPClient {
             const response = await this.axiosInstance.post(url, data, config)
             return response
         } catch (error) {
-            console.error("Error performing POST request:", error)
-            return undefined
+            this.handleError(error, url, "POST")
         }
     }
 }
