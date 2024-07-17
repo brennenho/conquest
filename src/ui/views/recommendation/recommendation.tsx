@@ -29,16 +29,24 @@ export const RecommendationView: React.FC = () => {
         const pattern = /^[A-Za-z]{3,4}-\d{3,4}$/
         if (!pattern.test(course)){
             setError("Invalid Course Format")
+            return false
         }
-        
+        if (!recommendationManager.validateCourse(course)){
+            setError("Course Not Found")
+            return false
+        }
+        return true
+
     }
-    const handleSubmit = async () => {
+    const handleSumbit = async () => {
         for (const course of courses) {
             if (!validateCourse(course)) {
                 setError(`Error finding a course matching ${course}`);    
                 return false;
             }
         }
+        const schedule = await recommendationManager.createSchedule(courses)
+        return schedule
     }
     return (
         <ScrollArea.Autosize mah={345} type="auto" scrollbarSize={6}>

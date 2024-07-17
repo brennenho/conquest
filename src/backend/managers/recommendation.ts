@@ -22,7 +22,13 @@ export class RecommendationManager {
 
     public async validateCourse(course: string) {
         try{
-            const result = await this._httpClient.post("search")
+            const result = await this._httpClient.post("search/search-course", {course})
+            return true
+        }
+        catch (e)
+        {
+            console.log("Error searching for course")
+            return false
         }
     }
 }
