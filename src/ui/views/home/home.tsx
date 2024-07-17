@@ -5,7 +5,7 @@ import { Header } from "~ui/components"
 import sharedStyles from "~ui/sharedStyles.module.scss"
 import { Menu } from "~ui/views"
 
-import { AboutView, CoursesView, WatchlistView } from ".."
+import { AboutView, CoursesView, WatchlistView, RecommendationView } from ".."
 
 interface HomeViewProps {
     email: string
@@ -29,6 +29,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ email, handleLogout }) => {
             {view === "home" && <CoursesView />}
             {view === "watchlist" && <WatchlistView />}
             {view === "about" && <AboutView />}
+            {view === "recommend" && <RecommendationView/>}
         </div>
     )
 }
