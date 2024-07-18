@@ -1,10 +1,12 @@
+import { Axios } from "axios"
 import { HTTPClient } from "../http"
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
 
-export class RecommendationManager {
+export class RecommendationManager{
     private _httpClient = HTTPClient.inst()
     public async createSchedule(
         courses: Array<string>
-    ) {
+    ): Promise<AxiosResponse<Array<string> | undefined>> {
         try {
             const result = await this._httpClient.post(
                 "/recommend/schedule",
@@ -15,20 +17,39 @@ export class RecommendationManager {
             return result
         } catch (e) {
             console.log(
-                `Error creating a schedule for ${courses}`
+                `Error scheduling courses`
+            )
+            throw new Error(e)
+        }
+    }
+    public async getProfessor(
+        first_name: string,
+        last_name: string,
+        department: string
+    ) {
+        try {
+            const result = await this._httpClient.post(
+                "/search/search-professor",
+                {
+                    first_name,
+                    last_name,
+                    department
+                }
+            )
+            return result.data.result
+        } catch (e) {
+            console.log(
+                `Error searching for professor: ${first_name} ${last_name}`
             )
         }
     }
-
     public async validateCourse(course: string) {
-        try{
-            const result = await this._httpClient.post("search/search-course", {course})
+        try {
+            const result = await this._httpClient.post("/search/search-course", { course })
             return true
-        }
-        catch (e)
-        {
-            console.log("Error searching for course")
+        } catch (error) {
             return false
         }
     }
+    
 }
