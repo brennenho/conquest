@@ -2,10 +2,6 @@
     display: flex;
     justify-content: center;
 }
-.removeButton{
-    height: 10px;
-    width: auto;
-}
 .loadingscreen {
     position: fixed;
     top: 0;
@@ -17,20 +13,31 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-  }
-  
-  .spinner {
+}
+
+.spinner {
     border: 4px solid rgba(0, 0, 0, 0.1);
     border-left-color: #000;
     border-radius: 50%;
     width: 40px;
     height: 40px;
     animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
+}
+
+@keyframes spin {
     to {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
-  
+}
+.addButton {
+    display: inline-block;
+    height: auto;
+    padding: 5px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.removeButton {
+    display: inline-block;
+    padding: 5px;
+    height: fit-content;
+}

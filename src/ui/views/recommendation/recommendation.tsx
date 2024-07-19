@@ -1,4 +1,5 @@
-import { Button, ScrollArea, Text, TextInput } from "@mantine/core"
+import { Button, CloseButton, ScrollArea, Text, TextInput } from "@mantine/core"
+import cn from "classnames"
 import React, { useState } from "react"
 
 import { RecommendationManager } from "~backend/managers/recommendation"
@@ -19,13 +20,13 @@ export const RecommendationView: React.FC = () => {
         setCourses(newCourses)
 
         const newErrors = [...errors]
-        newErrors[index] = "" 
+        newErrors[index] = ""
         setErrors(newErrors)
     }
 
     const addCourse = () => {
         setCourses([...courses, ""])
-        setErrors([...errors, ""]) 
+        setErrors([...errors, ""])
     }
 
     const removeCourse = (index: number) => {
@@ -91,17 +92,24 @@ export const RecommendationView: React.FC = () => {
                 </div>
             ) : (
                 <>
-                    <Text fw={500} ta="center">
-                        Enter your desired courses.
+                    <Text
+                        size="xs"
+                        fw={700}
+                        ta="center"
+                        className={sharedStyles.margin10}>
+                        Enter your planned courses
                     </Text>
-                    <div>
+                    <div className={sharedStyles.flexColumn}>
                         {courses.map((course, index) => (
-                            <div key={index}>
+                            <div
+                                key={index}
+                                className={cn(sharedStyles.flexCenter, sharedStyles.margin5)}>
                                 <TextInput
                                     variant="filled"
                                     radius="md"
                                     error={errors[index]}
                                     placeholder={`BIO-${100 + index}`}
+                                    maxLength={9}
                                     value={course}
                                     onChange={(event) =>
                                         handleCourseChange(
@@ -110,27 +118,30 @@ export const RecommendationView: React.FC = () => {
                                         )
                                     }
                                 />
-                                <Button
-                                    variant="light"
-                                    color="red"
-                                    size="md"
-                                    className={style.removeButton}
-                                    onClick={() => removeCourse(index)}>
-                                    Remove Course
-                                </Button>
+                                <CloseButton
+                                    onClick={() => removeCourse(index)}
+                                />
                             </div>
                         ))}
-                        <button onClick={addCourse}>Add Course</button>
+                        <Button
+                            variant="light"
+                            color="blue"
+                            className={style.addButton}
+                            onClick={addCourse}>
+                            <Text fw={700} size="xs">
+                                + Course
+                            </Text>
+                        </Button>
                     </div>
-                    <div className={sharedStyles.button}>
+                    {/* <div className={sharedStyles.button}>
                         <Button
                             variant="light"
                             color="red"
                             size="md"
                             onClick={handleSubmit}>
-                            Create Schedule
+                            <Text>Create Schedule</Text>
                         </Button>
-                    </div>
+                    </div> */}
                 </>
             )}
         </ScrollArea.Autosize>
