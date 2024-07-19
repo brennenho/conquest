@@ -1,6 +1,5 @@
-import { Axios } from "axios"
 import { HTTPClient } from "../http"
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios"
+import type { AxiosResponse } from "axios"
 
 export class RecommendationManager{
     private _httpClient = HTTPClient.inst()

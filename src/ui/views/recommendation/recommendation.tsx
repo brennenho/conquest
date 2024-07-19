@@ -25,8 +25,10 @@ export const RecommendationView: React.FC = () => {
     }
 
     const addCourse = () => {
-        setCourses([...courses, ""])
-        setErrors([...errors, ""])
+        if (courses.length < 5) {
+            setCourses([...courses, ""])
+            setErrors([...errors, ""])
+        }
     }
 
     const removeCourse = (index: number) => {
@@ -40,45 +42,42 @@ export const RecommendationView: React.FC = () => {
     const validateCourse = async (course: string, index: number) => {
         const pattern = /^[A-Za-z]{2,4}-\d{3,4}$/
         if (!pattern.test(course)) {
-            const newErrors = [...errors]
-            newErrors[index] = "Invalid Course Format"
-            setErrors(newErrors)
             return false
         }
         try {
             const isValid = await recommendationManager.validateCourse(course)
             if (!isValid) {
-                const newErrors = [...errors]
-                newErrors[index] = "Course Not Found"
-                setErrors(newErrors)
                 return false
             }
         } catch (error) {
-            const newErrors = [...errors]
-            newErrors[index] = "Error validating course"
-            setErrors(newErrors)
             return false
         }
         return true
     }
 
     const handleSubmit = async () => {
-        const newErrors = [...errors]
+        const newErrors = Array(courses.length).fill("")
         let allValid = true
+
         for (const [index, course] of courses.entries()) {
             const isValid = await validateCourse(course, index)
             if (!isValid) {
                 allValid = false
+                newErrors[index] = `Invalid input`
             }
         }
+
+        setErrors(newErrors)
+
         if (!allValid) {
             return
         }
+
         setLoading(true)
         try {
             await recommendationManager.createSchedule(courses)
         } catch (error) {
-            setErrors(["Invalid Course"])
+            setErrors(["Error creating schedule"])
         } finally {
             setLoading(false)
         }
@@ -103,7 +102,10 @@ export const RecommendationView: React.FC = () => {
                         {courses.map((course, index) => (
                             <div
                                 key={index}
-                                className={cn(sharedStyles.flexCenter, sharedStyles.margin5)}>
+                                className={cn(
+                                    sharedStyles.flexCenter,
+                                    sharedStyles.margin5
+                                )}>
                                 <TextInput
                                     variant="filled"
                                     radius="md"
@@ -123,25 +125,29 @@ export const RecommendationView: React.FC = () => {
                                 />
                             </div>
                         ))}
-                        <Button
-                            variant="light"
-                            color="blue"
-                            className={style.addButton}
-                            onClick={addCourse}>
-                            <Text fw={700} size="xs">
-                                + Course
-                            </Text>
-                        </Button>
+                        {courses.length < 5 && (
+                            <Button
+                                variant="light"
+                                color="blue"
+                                className={style.button}
+                                onClick={addCourse}>
+                                <Text fw={700} size="xs">
+                                    + Course
+                                </Text>
+                            </Button>
+                        )}
+                        <div className={cn(style.button, style.submitButton)}>
+                            <Button
+                                variant="light"
+                                color="black"
+                                size="sm"
+                                onClick={handleSubmit}>
+                                <Text fw={700} size="xs" ta="center">
+                                    Create Schedule
+                                </Text>
+                            </Button>
+                        </div>
                     </div>
-                    {/* <div className={sharedStyles.button}>
-                        <Button
-                            variant="light"
-                            color="red"
-                            size="md"
-                            onClick={handleSubmit}>
-                            <Text>Create Schedule</Text>
-                        </Button>
-                    </div> */}
                 </>
             )}
         </ScrollArea.Autosize>

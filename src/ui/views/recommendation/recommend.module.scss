@@ -29,7 +29,7 @@
         transform: rotate(360deg);
     }
 }
-.addButton {
+.button {
     display: inline-block;
     height: auto;
     padding: 5px;
@@ -40,4 +40,10 @@
     display: inline-block;
     padding: 5px;
     height: fit-content;
+}
+.submitButton{
+    position: fixed;
+    bottom: 15px;
+    right: 25%;
+    left: 25%; 
 }
