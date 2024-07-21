@@ -138,24 +138,26 @@ export const RecommendationView: React.FC = () => {
                             professorName = cleanName(course[8])
                         }
                         return (
-                            <ScrollArea.Autosize
-                                mah={345}
-                                type="auto"
-                                scrollbarSize={6}>
-                                <div key={index}>
-                                    <Course
-                                        name={cleanName(course[2])}
-                                        professor={
-                                            professorName !== ""
-                                                ? professorName
-                                                : null
-                                        }
-                                        days={cleanName(course[7])}
-                                        startTime={course[5]}
-                                        endTime={course[6]}
-                                    />
-                                </div>
-                            </ScrollArea.Autosize>
+                            <React.Fragment key={index}>
+                                <ScrollArea.Autosize
+                                    mah={345}
+                                    type="auto"
+                                    scrollbarSize={6}>
+                                    <div key={index}>
+                                        <Course
+                                            name={cleanName(course[2])}
+                                            professor={
+                                                professorName !== ""
+                                                    ? professorName
+                                                    : null
+                                            }
+                                            days={cleanName(course[7])}
+                                            startTime={course[5]}
+                                            endTime={course[6]}
+                                        />
+                                    </div>
+                                </ScrollArea.Autosize>
+                            </React.Fragment>
                         )
                     })}
                     <div className={sharedStyles.flexRow}>
