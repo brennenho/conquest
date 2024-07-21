@@ -5,6 +5,7 @@ import {
     IconChevronRight,
     IconHomeFilled,
     IconInfoSquareRoundedFilled,
+    IconCalendarEvent,
     IconLogout
 } from "@tabler/icons-react"
 import { useState } from "react"
@@ -24,6 +25,12 @@ const data = [
         label: "Watchlist",
         rightSection: <IconChevronRight size="1rem" stroke={1.5} />,
         view: "watchlist"
+    },
+    {
+        icon: IconCalendarEvent,
+        label: "Recommendation",
+        rightSection: <IconChevronRight size="1rem" stroke={1.5} />,
+        view: "recommend"
     },
     {
         icon: IconInfoSquareRoundedFilled,
