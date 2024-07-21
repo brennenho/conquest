@@ -1,11 +1,10 @@
 import { HTTPClient } from "../http"
-import type { AxiosResponse } from "axios"
 
 export class RecommendationManager{
     private _httpClient = HTTPClient.inst()
     public async createSchedule(
         courses: Array<string>
-    ): Promise<AxiosResponse<Array<string> | undefined>> {
+    ): Promise<Array<Array<string>> | undefined>{
         try {
             const result = await this._httpClient.post(
                 "/recommend/schedule",
@@ -13,7 +12,7 @@ export class RecommendationManager{
                     courses
                 }
             )
-            return result
+            return result.data
         } catch (e) {
             console.log(
                 `Error scheduling courses`
@@ -48,6 +47,15 @@ export class RecommendationManager{
             return true
         } catch (error) {
             return false
+        }
+    }
+    public async searchBySectionID(course: string){
+        try{
+            const result = await this._httpClient.post("/search/search-course", {course})
+            return result.data.result
+        }
+        catch (error){
+            console.log("Error finding the class")
         }
     }
     
