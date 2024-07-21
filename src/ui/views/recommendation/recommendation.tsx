@@ -101,7 +101,7 @@ export const RecommendationView: React.FC = () => {
     const clear = () => {
         setErrors([])
         setLoading(false)
-        setCourses([""])
+        setCourses(["", "", "", ""])
         setSchedules(undefined)
         setScheduleIndex(0)
         setCourseData([])
@@ -164,15 +164,17 @@ export const RecommendationView: React.FC = () => {
                                 variant="light"
                                 color="black"
                                 size="sm"
+                                className={sharedStyles.margin5}
                                 onClick={previousSchedule}>
                                 <Text fw={700} size="xs" ta="center">
-                                    Previous
+                                    Prev
                                 </Text>
                             </Button>
                             <Button
                                 variant="light"
                                 color="black"
                                 size="sm"
+                                className={sharedStyles.margin5}
                                 onClick={clear}>
                                 <Text fw={700} size="xs" ta="center">
                                     Exit
@@ -182,6 +184,7 @@ export const RecommendationView: React.FC = () => {
                                 variant="light"
                                 color="black"
                                 size="sm"
+                                className={sharedStyles.margin5}
                                 onClick={nextSchedule}>
                                 <Text fw={700} size="xs" ta="center">
                                     Next
@@ -189,7 +192,9 @@ export const RecommendationView: React.FC = () => {
                             </Button>
                         </div>
                     </div>
-                    <Text fw={700} size="xs" ta="center">{scheduleIndex+1}/{schedules.length}</Text>
+                    <Text fw={700} size="xs" ta="center">
+                        {scheduleIndex + 1}/{schedules.length}
+                    </Text>
                 </div>
             ) : loading ? (
                 <div className={style.loadingscreen}>
